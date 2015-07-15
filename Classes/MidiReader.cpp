@@ -5,6 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <assert.h>
+#include <vector>
 
 std::vector<Note> parse_attack_notes(const char* file_path)
 {
@@ -58,7 +59,7 @@ std::vector<Note> parse_attack_notes(const char* file_path)
       const double dur = midifile[track][event].getDurationInSeconds();
       const int note_id = midifile[track][event][1];
 
-      notes.emplace_back(start_time, dur, note_id);
+      notes.emplace_back(start_time, dur, note_id, static_cast<int>(notes.size()));
     }
   }
 

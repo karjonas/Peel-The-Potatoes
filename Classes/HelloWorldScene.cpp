@@ -4,6 +4,9 @@
 
 USING_NS_CC;
 
+#include "audio/include/SimpleAudioEngine.h"
+#include <iostream>
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -29,54 +32,74 @@ bool HelloWorld::init()
         return false;
     }
     
-    auto notes = parse_attack_notes("/home/jonas/Downloads/Untitled.mid");
+    current_notes = parse_attack_notes("/home/jonas/Downloads/Untitled.mid");
 
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    this->scheduleUpdate();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+    // creating a keyboard event listener
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
+    listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
+    note_to_key[35] = EventKeyboard::KeyCode::KEY_SPACE;
 
-    /////////////////////////////
-    // 3. add your codes below...
+    auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
+    audio->playBackgroundMusic("/home/jonas/Downloads/Untitled.wav", true);
 
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-    
     return true;
+}
+
+
+// Implementation of the keyboard event callback function prototype
+void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+  if (std::find(heldKeys.begin(), heldKeys.end(), keyCode) == heldKeys.end())
+    heldKeys.push_back(keyCode);
+}
+
+void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
+{
+  heldKeys.erase(std::remove(heldKeys.begin(), heldKeys.end(), keyCode), heldKeys.end());
+  releasedKeys.push_back(keyCode);
+}
+
+void HelloWorld::update(float dt)
+{
+  accum_time += static_cast<double>(dt);
+
+  if (!current_notes.empty())
+  {
+    const Note& next_note = current_notes.front();
+
+    const EventKeyboard::KeyCode keyCode = note_to_key[next_note.note_id];
+
+    if (next_note.start_time <= accum_time)
+    {
+      std::cout << next_note.note_id << std::endl;
+
+      if (std::find(heldKeys.begin(), heldKeys.end(), keyCode) != heldKeys.end())
+      {
+        last_hit_index = next_note.idx;
+        std::cout << "HIT" << std::endl;
+      }
+    }
+
+    if ((next_note.start_time + next_note.duration) <= accum_time)
+    {
+      if (last_hit_index == -1)
+        missed_notes.push_back(next_note.idx);
+
+      current_notes.erase(current_notes.begin());
+      last_hit_index = -1;
+
+      std::cout << "--" << std::endl;
+    }
+
+
+  }
 }
 
 
