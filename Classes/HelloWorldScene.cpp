@@ -49,9 +49,37 @@ bool HelloWorld::init()
 
     audio->playBackgroundMusic("/home/jonas/Downloads/Untitled.wav", true);
 
+    create_tab_sprite();
+
+
     return true;
 }
 
+void HelloWorld::create_tab_sprite()
+{
+  const size_t num_notes = current_notes.size();
+
+  std::vector<Sprite*> sprites;
+  sprites.reserve(num_notes); // this may or may not make sense for your usage
+
+  const int max_song_length_secs = 10*60;
+  const int pixels_per_sec = 100;
+
+  for (const Note& note : current_notes)
+  {
+      cocos2d::Sprite* sprite = cocos2d::Sprite::create("/home/jonas/Downloads/Sprites/flatDark/flatDark00.png");
+
+      sprite->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
+
+      sprites.push_back(sprite);
+
+      auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+
+      sprite->runAction(moveBy);
+
+      addChild(sprite, 1);
+  }
+}
 
 // Implementation of the keyboard event callback function prototype
 void HelloWorld::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)

@@ -25,6 +25,8 @@ public:
 
     void update(float dt) override;
 
+    void create_tab_sprite();
+
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
 
