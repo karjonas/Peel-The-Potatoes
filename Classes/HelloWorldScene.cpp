@@ -59,25 +59,28 @@ void HelloWorld::create_tab_sprite()
 {
   const size_t num_notes = current_notes.size();
 
-  std::vector<Sprite*> sprites;
-  sprites.reserve(num_notes); // this may or may not make sense for your usage
+  note_sprites.reserve(num_notes);
 
   const int max_song_length_secs = 10*60;
-  const int pixels_per_sec = 100;
+  const int pixels_per_sec = 200;
 
   for (const Note& note : current_notes)
   {
-      cocos2d::Sprite* sprite = cocos2d::Sprite::create("/home/jonas/Downloads/Sprites/flatDark/flatDark00.png");
+    NoteSprite note_sprite;
 
-      sprite->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
+    cocos2d::Sprite* sprite = cocos2d::Sprite::create("/home/jonas/Downloads/Sprites/flatDark/flatDark00.png");
 
-      sprites.push_back(sprite);
+    sprite->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
 
-      auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+    auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
 
-      sprite->runAction(moveBy);
+    sprite->runAction(moveBy);
 
-      addChild(sprite, 1);
+    addChild(sprite, 1);
+
+    note_sprite.note = note;
+    note_sprite.sprite = sprite;
+    note_sprites.push_back(note_sprite);
   }
 }
 
@@ -98,29 +101,31 @@ void HelloWorld::update(float dt)
 {
   accum_time += static_cast<double>(dt);
 
-  if (!current_notes.empty())
+  if (!note_sprites.empty())
   {
-    const Note& next_note = current_notes.front();
+    const NoteSprite& next_note = note_sprites.front();
+    const Note& note = next_note.note;
 
-    const EventKeyboard::KeyCode keyCode = note_to_key[next_note.note_id];
+    const EventKeyboard::KeyCode keyCode = note_to_key[note.note_id];
 
-    if (next_note.start_time <= accum_time)
+    if (note.start_time <= accum_time)
     {
-      std::cout << next_note.note_id << std::endl;
+      std::cout << note.note_id << std::endl;
 
       if (std::find(heldKeys.begin(), heldKeys.end(), keyCode) != heldKeys.end())
       {
-        last_hit_index = next_note.idx;
+        last_hit_index = note.idx;
         std::cout << "HIT" << std::endl;
       }
     }
 
-    if ((next_note.start_time + next_note.duration) <= accum_time)
+    if ((note.start_time + note.duration) <= accum_time)
     {
       if (last_hit_index == -1)
-        missed_notes.push_back(next_note.idx);
+        missed_notes.push_back(note.idx);
 
-      current_notes.erase(current_notes.begin());
+      next_note.sprite->removeFromParentAndCleanup(true);
+      note_sprites.erase(note_sprites.begin());
       last_hit_index = -1;
 
       std::cout << "--" << std::endl;

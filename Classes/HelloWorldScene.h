@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 #include "MidiReader.h"
+#include "NoteSprite.h"
 
 class HelloWorld : public cocos2d::Layer
 {
@@ -33,6 +34,9 @@ public:
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
 
     std::vector<Note> current_notes;
+
+    std::vector<NoteSprite> note_sprites;
+
 
     std::vector<int> missed_notes;
 
