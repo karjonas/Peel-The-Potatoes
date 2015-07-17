@@ -45,6 +45,8 @@ public:
     std::vector<int> missed_notes;
 
     double accum_time = 0.0;
+
+    double player_health = 100.0;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

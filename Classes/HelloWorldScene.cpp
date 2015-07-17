@@ -107,13 +107,14 @@ std::vector<int> HelloWorld::get_current_note_sprite_indices() const
 void HelloWorld::prune_old_notes()
 {
   const double time = accum_time;
-  auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [time](NoteSprite& ns)
+  auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
     if ((ns.note.start_time + ns.note.duration) < time)
     {
       if (!ns.has_hit)
       {
         std::cout << "note missed" << std::endl;
+        player_health -= 10.0;
         //missed_notes.push_back(note.idx);
       }
       ns.label->removeFromParentAndCleanup(true);
@@ -170,6 +171,8 @@ void HelloWorld::update(float dt)
 
     if (!hit)
     {
+      player_health -= 0.1;
+      std::cout << "player_health" << player_health << std::endl;
       std::cout << "Miss" << std::endl;
     }
   }
