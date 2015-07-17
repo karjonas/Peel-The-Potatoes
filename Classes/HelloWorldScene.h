@@ -27,11 +27,15 @@ public:
     void update(float dt) override;
 
     void create_tab_sprite();
+    std::vector<int> get_current_note_sprite_indices() const;
+    void prune_old_notes();
+
 
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
 
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
+    std::map<int, std::string> note_to_string;
 
     std::vector<Note> current_notes;
 
@@ -41,7 +45,6 @@ public:
     std::vector<int> missed_notes;
 
     double accum_time = 0.0;
-    int last_hit_index = -1;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

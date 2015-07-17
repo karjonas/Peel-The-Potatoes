@@ -34,6 +34,8 @@ bool HelloWorld::init()
     
     current_notes = parse_attack_notes("/home/jonas/Downloads/Untitled.mid");
 
+    // FIXME: Make sure notes are sorted by time
+
     this->scheduleUpdate();
 
     // creating a keyboard event listener
@@ -43,14 +45,14 @@ bool HelloWorld::init()
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-    note_to_key[35] = EventKeyboard::KeyCode::KEY_SPACE;
+    note_to_key[35] = EventKeyboard::KeyCode::KEY_A;
+    note_to_string[35] = "A";
 
     auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 
     audio->playBackgroundMusic("/home/jonas/Downloads/Untitled.wav", true);
 
     create_tab_sprite();
-
 
     return true;
 }
@@ -67,21 +69,63 @@ void HelloWorld::create_tab_sprite()
   for (const Note& note : current_notes)
   {
     NoteSprite note_sprite;
+    std::string text;
 
-    cocos2d::Sprite* sprite = cocos2d::Sprite::create("/home/jonas/Downloads/Sprites/flatDark/flatDark00.png");
+    auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Marker Felt.ttf",32);
 
-    sprite->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
+    label->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
 
     auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
 
-    sprite->runAction(moveBy);
+    label->runAction(moveBy);
 
-    addChild(sprite, 1);
+    addChild(label, 1);
 
     note_sprite.note = note;
-    note_sprite.sprite = sprite;
+    note_sprite.label = label;
     note_sprites.push_back(note_sprite);
   }
+}
+
+std::vector<int> HelloWorld::get_current_note_sprite_indices() const
+{
+  std::vector<int> indices;
+
+  size_t idx = 0;
+  for (auto note_sprite : note_sprites)
+  {
+    if (note_sprite.note.start_time <= accum_time)
+     indices.push_back(idx);
+    else
+      break;
+    idx++;
+  }
+
+  return indices;
+}
+
+void HelloWorld::prune_old_notes()
+{
+  const double time = accum_time;
+  auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [time](NoteSprite& ns)
+  {
+    if ((ns.note.start_time + ns.note.duration) < time)
+    {
+      if (!ns.has_hit)
+      {
+        std::cout << "note missed" << std::endl;
+        //missed_notes.push_back(note.idx);
+      }
+      ns.label->removeFromParentAndCleanup(true);
+
+      std::cout << "--" << std::endl;
+
+      return true;
+    }
+    return false;
+  });
+
+  note_sprites.erase(remove_it, note_sprites.end());
 }
 
 // Implementation of the keyboard event callback function prototype
@@ -101,37 +145,33 @@ void HelloWorld::update(float dt)
 {
   accum_time += static_cast<double>(dt);
 
-  if (!note_sprites.empty())
+  prune_old_notes();
+
+  std::vector<int> current_indices = get_current_note_sprite_indices();
+
+  for (auto key : heldKeys)
   {
-    const NoteSprite& next_note = note_sprites.front();
-    const Note& note = next_note.note;
+    bool hit = false;
 
-    const EventKeyboard::KeyCode keyCode = note_to_key[note.note_id];
-
-    if (note.start_time <= accum_time)
+    for (int idx : current_indices)
     {
-      std::cout << note.note_id << std::endl;
+      NoteSprite& note_sprite = note_sprites[idx];
+      const Note& note = note_sprite.note;
 
-      if (std::find(heldKeys.begin(), heldKeys.end(), keyCode) != heldKeys.end())
+      const EventKeyboard::KeyCode keyCode = note_to_key[note.note_id];
+
+      if (keyCode == key)
       {
-        last_hit_index = note.idx;
+        note_sprite.has_hit = true;
         std::cout << "HIT" << std::endl;
+        hit = true;
       }
     }
 
-    if ((note.start_time + note.duration) <= accum_time)
+    if (!hit)
     {
-      if (last_hit_index == -1)
-        missed_notes.push_back(note.idx);
-
-      next_note.sprite->removeFromParentAndCleanup(true);
-      note_sprites.erase(note_sprites.begin());
-      last_hit_index = -1;
-
-      std::cout << "--" << std::endl;
+      std::cout << "Miss" << std::endl;
     }
-
-
   }
 }
 
