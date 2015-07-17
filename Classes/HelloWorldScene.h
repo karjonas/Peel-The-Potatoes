@@ -47,6 +47,9 @@ public:
     double accum_time = 0.0;
 
     double player_health = 100.0;
+
+    static constexpr double c_note_miss_damage = 10.0;
+    static constexpr double c_hold_miss_damage_per_sec = 10.0;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

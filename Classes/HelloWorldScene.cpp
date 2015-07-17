@@ -114,7 +114,7 @@ void HelloWorld::prune_old_notes()
       if (!ns.has_hit)
       {
         std::cout << "note missed" << std::endl;
-        player_health -= 10.0;
+        player_health -= c_note_miss_damage;
         //missed_notes.push_back(note.idx);
       }
       ns.label->removeFromParentAndCleanup(true);
@@ -171,7 +171,7 @@ void HelloWorld::update(float dt)
 
     if (!hit)
     {
-      player_health -= 0.1;
+      player_health -= c_hold_miss_damage_per_sec*static_cast<double>(dt);
       std::cout << "player_health" << player_health << std::endl;
       std::cout << "Miss" << std::endl;
     }
