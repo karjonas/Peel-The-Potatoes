@@ -131,7 +131,11 @@ void HelloWorld::create_tab_sprite()
     note_sprites.push_back(note_sprite);
   }
 
-
+  {
+    auto sprite = cocos2d::Sprite::create("line_static.png");
+    sprite->setPosition(cocos2d::Point(mid_w, 50));
+    addChild(sprite, 1);
+  }
 
 }
 
