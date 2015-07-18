@@ -121,6 +121,8 @@ set(GAME_SRC
   Classes/midifile/src-library/MidiFile.cpp
   Classes/midifile/src-library/MidiMessage.cpp
   Classes/midifile/src-library/Options.cpp
+  Classes/WinningScene.cpp
+  Classes/LevelScene.cpp
   Classes/NoteSprite.cpp
   Classes/MidiReader.cpp
   Classes/AppDelegate.cpp
