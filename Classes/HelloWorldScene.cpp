@@ -32,7 +32,8 @@ bool HelloWorld::init()
         return false;
     }
     
-    current_notes = parse_attack_notes("/home/jonas/Downloads/Untitled.mid");
+    parsed_file = parse_attack_notes("/home/jonas/Downloads/Untitled.mid");
+    current_notes = parsed_file.notes;
 
     // FIXME: Make sure notes are sorted by time
 
@@ -47,6 +48,9 @@ bool HelloWorld::init()
 
     note_to_key[35] = EventKeyboard::KeyCode::KEY_A;
     note_to_string[35] = "A";
+
+    note_to_key[40] = EventKeyboard::KeyCode::KEY_D;
+    note_to_string[40] = "D";
 
     auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 
@@ -89,6 +93,25 @@ void HelloWorld::create_tab_sprite()
   const Size visibleSize = Director::getInstance()->getVisibleSize();
   const float mid_w = visibleSize.width/2;
 
+  // Fill lines
+  const double secs_per_quarter =
+      parsed_file.ticks_per_quarter_note * parsed_file.seconds_per_tick;
+
+  const size_t num_lines = max_song_length_secs/secs_per_quarter;
+
+  for (size_t i = 0; i < num_lines; i++)
+  {
+    auto sprite = cocos2d::Sprite::create("line.png");
+
+    sprite->setPosition(cocos2d::Point(mid_w + i*secs_per_quarter*pixels_per_sec , 50));
+
+    auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+
+    sprite->runAction(moveBy);
+
+    addChild(sprite, 1);
+  }
+
   for (const Note& note : current_notes)
   {
     NoteSprite note_sprite;
@@ -107,6 +130,9 @@ void HelloWorld::create_tab_sprite()
     note_sprite.label = label;
     note_sprites.push_back(note_sprite);
   }
+
+
+
 }
 
 std::vector<int> HelloWorld::get_current_note_sprite_indices() const

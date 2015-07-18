@@ -34,6 +34,8 @@ public:
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
 
+    ParsedFile parsed_file;
+
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
     std::map<int, std::string> note_to_string;
 

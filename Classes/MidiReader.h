@@ -6,18 +6,25 @@
 struct Note
 {
   Note() = default;
-  Note(double start_time_in, double duration_in, int note_id_in, int idx_in)
+  Note(double start_time_in, double duration_in, int note_id_in, int tick_in)
     : start_time(start_time_in)
     , duration(duration_in)
     , note_id(note_id_in)
-    , idx(idx_in) {}
+    , tick(tick_in) {}
 
   double start_time;
   double duration;
   int note_id;
-  int idx;
+  int tick;
 };
 
-std::vector<Note> parse_attack_notes(const char* file_path);
+struct ParsedFile
+{
+  std::vector<Note> notes;
+  double seconds_per_tick;
+  int ticks_per_quarter_note;
+};
+
+ParsedFile parse_attack_notes(const char* file_path);
 
 #endif // __MIDI_READER_H__

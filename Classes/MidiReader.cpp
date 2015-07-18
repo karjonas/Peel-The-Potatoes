@@ -7,9 +7,9 @@
 #include <assert.h>
 #include <vector>
 
-std::vector<Note> parse_attack_notes(const char* file_path)
+ParsedFile parse_attack_notes(const char* file_path)
 {
-  std::vector<Note> notes;
+  ParsedFile parsed_file;
   MidiFile midifile;
 
   midifile.read(file_path);
@@ -19,6 +19,8 @@ std::vector<Note> parse_attack_notes(const char* file_path)
 
   const int tpqn = midifile.getTicksPerQuarterNote();
   const int tracks = midifile.getTrackCount();
+
+  parsed_file.ticks_per_quarter_note = tpqn;
 
   assert(tracks >= 2);
 
@@ -35,6 +37,7 @@ std::vector<Note> parse_attack_notes(const char* file_path)
       if (spt_curr != -1)
       {
         spt = spt_curr;
+        parsed_file.seconds_per_tick = spt_curr;
         found = true;
         break;
       }
@@ -49,19 +52,22 @@ std::vector<Note> parse_attack_notes(const char* file_path)
   for (int event=0; event < midifile[track].size(); event++) {
     const double spt_curr = midifile[track][event].getTempoSPT(tpqn);
     if (spt_curr != -1)
+    {
       spt = spt_curr;
+    }
 
     const bool note_on = midifile[track][event].isNoteOn() == 1;
 
     if (note_on)
     {
+      const int tick = midifile[track][event].tick;
       const double start_time = spt*midifile[track][event].tick;
       const double dur = midifile[track][event].getDurationInSeconds();
       const int note_id = midifile[track][event][1];
 
-      notes.emplace_back(start_time, dur, note_id, static_cast<int>(notes.size()));
+      parsed_file.notes.emplace_back(start_time, dur, note_id, tick);
     }
   }
 
-  return notes;
+  return parsed_file;
 }
