@@ -44,6 +44,8 @@ public:
     cocos2d::Sprite* hero_sprite = nullptr;
     cocos2d::Sprite* potato_sprite = nullptr;
 
+    cocos2d::Label* hero_health_label = nullptr;
+
     std::vector<int> missed_notes;
 
     double accum_time = 0.0;

@@ -70,6 +70,10 @@ bool HelloWorld::init()
       addChild(potato_sprite, 1);
     }
 
+    hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
+    hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 300));
+    addChild(hero_health_label, 1);
+
     return true;
 }
 
@@ -133,6 +137,8 @@ void HelloWorld::prune_old_notes()
       {
         std::cout << "note missed" << std::endl;
         player_health -= c_note_miss_damage;
+        hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
+
         //missed_notes.push_back(note.idx);
       }
       ns.label->removeFromParentAndCleanup(true);
@@ -182,7 +188,9 @@ void HelloWorld::update(float dt)
       if (keyCode == key)
       {
         note_sprite.has_hit = true;
+        note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
         std::cout << "HIT" << std::endl;
+
         hit = true;
       }
     }
@@ -190,6 +198,8 @@ void HelloWorld::update(float dt)
     if (!hit)
     {
       player_health -= c_hold_miss_damage_per_sec*static_cast<double>(dt);
+      hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
+
       std::cout << "player_health" << player_health << std::endl;
       std::cout << "Miss" << std::endl;
     }
