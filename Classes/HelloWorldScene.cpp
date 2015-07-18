@@ -54,6 +54,22 @@ bool HelloWorld::init()
 
     create_tab_sprite();
 
+    const Size visibleSize = Director::getInstance()->getVisibleSize();
+    const float mid_h = visibleSize.height/2;
+    const float mid_w = visibleSize.width/2;
+
+    {
+      hero_sprite = cocos2d::Sprite::create("hero.png");
+      hero_sprite->setPosition(cocos2d::Point(mid_w - 100, mid_h));
+      addChild(hero_sprite, 1);
+    }
+
+    {
+      potato_sprite = cocos2d::Sprite::create("potato.png");
+      potato_sprite->setPosition(cocos2d::Point(mid_w + 100, mid_h));
+      addChild(potato_sprite, 1);
+    }
+
     return true;
 }
 
@@ -66,14 +82,16 @@ void HelloWorld::create_tab_sprite()
   const int max_song_length_secs = 10*60;
   const int pixels_per_sec = 200;
 
+  const Size visibleSize = Director::getInstance()->getVisibleSize();
+  const float mid_w = visibleSize.width/2;
+
   for (const Note& note : current_notes)
   {
     NoteSprite note_sprite;
-    std::string text;
 
     auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Marker Felt.ttf",32);
 
-    label->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , 50));
+    label->setPosition(cocos2d::Point(mid_w + note.start_time*pixels_per_sec , 50));
 
     auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
 

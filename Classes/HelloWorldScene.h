@@ -41,6 +41,8 @@ public:
 
     std::vector<NoteSprite> note_sprites;
 
+    cocos2d::Sprite* hero_sprite = nullptr;
+    cocos2d::Sprite* potato_sprite = nullptr;
 
     std::vector<int> missed_notes;
 
