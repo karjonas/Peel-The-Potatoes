@@ -65,11 +65,18 @@ void LevelScene::post_init(GlobalData global_data)
 
   audio->playBackgroundMusic(global_data.levels[global_data.curr_level_idx].audio_file.c_str(), false);
 
-  create_tab_sprite();
-
   const Size visibleSize = Director::getInstance()->getVisibleSize();
   const float mid_h = visibleSize.height/2;
   const float mid_w = visibleSize.width/2;
+
+
+  {
+    auto sprite = cocos2d::Sprite::create("background.png");
+    sprite->setPosition(cocos2d::Point(mid_w, mid_h));
+    addChild(sprite, 1);
+  }
+
+  create_tab_sprite();
 
   {
     hero_sprite = cocos2d::Sprite::create("hero.png");
@@ -84,8 +91,9 @@ void LevelScene::post_init(GlobalData global_data)
   }
 
   hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
-  hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 300));
+  hero_health_label->setPosition(cocos2d::Point(mid_w - 100, mid_h + 100));
   addChild(hero_health_label, 1);
+
 }
 
 void LevelScene::create_tab_sprite()
@@ -108,9 +116,10 @@ void LevelScene::create_tab_sprite()
 
   for (size_t i = 0; i < num_lines; i++)
   {
-    auto sprite = cocos2d::Sprite::create("line.png");
 
-    sprite->setPosition(cocos2d::Point(mid_w + i*secs_per_quarter*pixels_per_sec , 50));
+    auto sprite = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png") ;
+
+    sprite->setPosition(cocos2d::Point(mid_w + i*secs_per_quarter*pixels_per_sec , 51));
 
     auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
 
@@ -136,12 +145,6 @@ void LevelScene::create_tab_sprite()
     note_sprite.note = note;
     note_sprite.label = label;
     note_sprites.push_back(note_sprite);
-  }
-
-  {
-    auto sprite = cocos2d::Sprite::create("line_static.png");
-    sprite->setPosition(cocos2d::Point(mid_w, 50));
-    addChild(sprite, 1);
   }
 
 }
@@ -209,7 +212,7 @@ void LevelScene::update(float dt)
 
   prune_old_notes();
 
-  const bool song_done = accum_time > 5;
+  const bool song_done = accum_time > 50;
 
   if (song_done)
   {

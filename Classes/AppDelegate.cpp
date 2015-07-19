@@ -34,7 +34,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLViewImpl::createWithRect("Insanity Jam 4", Rect(0,0,640,480));
+        glview = GLViewImpl::createWithRect("Insanity Jam 4", Rect(0,0,640,400));
         director->setOpenGLView(glview);
     }
 
