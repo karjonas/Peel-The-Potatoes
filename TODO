@@ -1,9 +1,7 @@
-- Stöd flera attacker samtidigt
-- Lägg in timeout vid feltryck på knapp
-- Lägg in viss felmarginal
-- Måla tidslinje med knappar som ska tryckas
-- Indikera timeout vid miss
-- Animera en gubbe som slår en potatis
-- Lägg in fler banor
-- Lägg in ljud för slagen
-- Lägg in Intro-scen
+- felmarginal, Minska om för lång
+- fler banor
+- ljud för slagen
+- Intro-scen
+- hälsa för gubbe och potatis per bana
+- Vid död, starta om banan
+- text som fadear ut vid start av bana, "Potato #1"
