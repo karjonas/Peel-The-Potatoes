@@ -188,6 +188,12 @@ void LevelScene::prune_old_notes()
         auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
         potato_sprite->runAction(seq);
 
+        auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
+        auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
+        auto seq_hero = Sequence::create(tintTo0, tintTo1, nullptr);
+
+        hero_sprite->runAction(seq_hero);
+
         //missed_notes.push_back(note.idx);
       }
       ns.label->removeFromParentAndCleanup(true);
@@ -290,7 +296,14 @@ void LevelScene::update(float dt)
 
       auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
       hero_sprite->runAction(seq);
+
+      auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
+      auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
+      auto seq_potato = Sequence::create(tintTo0, tintTo1, nullptr);
+
+      potato_sprite->runAction(seq_potato);
   }
+
 }
 
 
