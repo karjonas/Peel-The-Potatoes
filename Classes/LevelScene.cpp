@@ -179,6 +179,15 @@ void LevelScene::prune_old_notes()
         player_health -= GlobalData::c_note_miss_damage;
         hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
 
+        const Size visibleSize = Director::getInstance()->getVisibleSize();
+        const float mid_w = visibleSize.width/2;
+
+        auto moveToAttack = MoveTo::create(0.1f, cocos2d::Point(mid_w + 50, 250));
+        auto moveToReturn = MoveTo::create(0.1f, cocos2d::Point(mid_w + 100, 250));
+
+        auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
+        potato_sprite->runAction(seq);
+
         //missed_notes.push_back(note.idx);
       }
       ns.label->removeFromParentAndCleanup(true);
@@ -235,6 +244,8 @@ void LevelScene::update(float dt)
 
   std::vector<int> current_indices = get_current_note_sprite_indices();
 
+  bool attack = false;
+
   for (auto key : heldKeys)
   {
     bool hit = false;
@@ -248,10 +259,13 @@ void LevelScene::update(float dt)
 
       if (keyCode == key)
       {
-        note_sprite.has_hit = true;
-        note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
-        std::cout << "HIT" << std::endl;
-
+        if (!note_sprite.has_hit)
+        {
+          attack = true;
+          note_sprite.has_hit = true;
+          note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
+          std::cout << "HIT" << std::endl;
+        }
         hit = true;
       }
     }
@@ -264,6 +278,18 @@ void LevelScene::update(float dt)
       std::cout << "player_health" << player_health << std::endl;
       std::cout << "Miss" << std::endl;
     }
+  }
+
+  if (attack)
+  {
+      const Size visibleSize = Director::getInstance()->getVisibleSize();
+      const float mid_w = visibleSize.width/2;
+
+      auto moveToAttack = MoveTo::create(0.1f, cocos2d::Point(mid_w - 50, 250));
+      auto moveToReturn = MoveTo::create(0.1f, cocos2d::Point(mid_w - 100, 250));
+
+      auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
+      hero_sprite->runAction(seq);
   }
 }
 
