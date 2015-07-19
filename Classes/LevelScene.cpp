@@ -80,18 +80,18 @@ void LevelScene::post_init(GlobalData global_data)
 
   {
     hero_sprite = cocos2d::Sprite::create("hero.png");
-    hero_sprite->setPosition(cocos2d::Point(mid_w - 100, mid_h));
+    hero_sprite->setPosition(cocos2d::Point(mid_w - 100, 250));
     addChild(hero_sprite, 1);
   }
 
   {
     potato_sprite = cocos2d::Sprite::create("potato.png");
-    potato_sprite->setPosition(cocos2d::Point(mid_w + 100, mid_h));
+    potato_sprite->setPosition(cocos2d::Point(mid_w + 100, 250));
     addChild(potato_sprite, 1);
   }
 
   hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
-  hero_health_label->setPosition(cocos2d::Point(mid_w - 100, mid_h + 100));
+  hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 250 + 100));
   addChild(hero_health_label, 1);
 
 }
