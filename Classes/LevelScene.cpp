@@ -2,6 +2,7 @@
 
 #include "MidiReader.h"
 #include "WinningScene.h"
+#include "PreLevelScene.h"
 
 USING_NS_CC;
 
@@ -90,10 +91,11 @@ void LevelScene::post_init(GlobalData global_data)
     addChild(potato_sprite, 1);
   }
 
-  hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
-  hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 250 + 100));
-  addChild(hero_health_label, 1);
-
+  {
+    hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
+    hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 250 + 100));
+    addChild(hero_health_label, 1);
+  }
 }
 
 void LevelScene::create_tab_sprite()
@@ -242,7 +244,7 @@ void LevelScene::update(float dt)
       if (global_data_new.curr_level_idx >= global_data_new.levels.size())
         next_level = WinningScene::createScene(); // FIXME: Set Winning Screen
       else
-        next_level = LevelScene::createScene(global_data_new);
+        next_level = PreLevelScene::createScene(global_data_new);
 
       Director::getInstance()->replaceScene(next_level);
       return;
@@ -281,8 +283,11 @@ void LevelScene::update(float dt)
       player_health -= GlobalData::c_hold_miss_damage_per_sec*static_cast<double>(dt);
       hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
 
-      std::cout << "player_health" << player_health << std::endl;
-      std::cout << "Miss" << std::endl;
+      auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
+      auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
+      auto seq_hero = Sequence::create(tintTo0, tintTo1, nullptr);
+
+      hero_sprite->runAction(seq_hero);
     }
   }
 

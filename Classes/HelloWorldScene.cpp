@@ -1,7 +1,7 @@
 #include "HelloWorldScene.h"
 
 #include "MidiReader.h"
-#include "LevelScene.h"
+#include "PreLevelScene.h"
 
 USING_NS_CC;
 
@@ -63,8 +63,9 @@ void HelloWorld::update(float dt)
     level.audio_file = "/home/jonas/Downloads/Untitled.wav";
     level.midi_file = "/home/jonas/Downloads/Untitled.mid";
     global_data.levels.push_back(level);
+    global_data.pre_level_text.push_back("Kill the Potatoes!");
   }
 
-  auto first_level = LevelScene::createScene(global_data);
+  auto first_level = PreLevelScene::createScene(global_data);
   Director::getInstance()->replaceScene(first_level);
 }
