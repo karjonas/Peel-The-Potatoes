@@ -96,6 +96,12 @@ void LevelScene::post_init(GlobalData global_data)
     hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 250 + 100));
     addChild(hero_health_label, 1);
   }
+
+  {
+    potato_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
+    potato_health_label->setPosition(cocos2d::Point(mid_w + 100, 250 + 100));
+    addChild(potato_health_label, 1);
+  }
 }
 
 void LevelScene::create_tab_sprite()
@@ -229,15 +235,17 @@ void LevelScene::update(float dt)
 
   prune_old_notes();
 
-  const bool song_done = accum_time > 50;
+  const bool song_done = potato_health <= 0.0 || player_health <= 0.0;
 
   if (song_done)
   {
-      GlobalData global_data_new = global_data;
-      global_data_new.curr_level_idx++;
-
       auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
       audio->stopBackgroundMusic(true);
+
+      GlobalData global_data_new = global_data;
+
+      if (player_health > 0.0)
+        global_data_new.curr_level_idx++;
 
       Scene* next_level;
 
@@ -272,6 +280,10 @@ void LevelScene::update(float dt)
           attack = true;
           note_sprite.has_hit = true;
           note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
+
+          potato_health -= global_data.level_attack_damage[global_data.curr_level_idx];
+          potato_health_label->setString(std::to_string(static_cast<int>(potato_health)));
+
           std::cout << "HIT" << std::endl;
         }
         hit = true;
