@@ -60,11 +60,18 @@ void HelloWorld::update(float dt)
 
   {
     LevelData level;
-    level.audio_file = "/home/jonas/Downloads/Untitled.wav";
-    level.midi_file = "/home/jonas/Downloads/Untitled.mid";
+    level.audio_file = "/home/jonas/Downloads/Ac\ Dc\ -\ Highway\ To\ Hell\ \(Pro\).wav";
+    level.midi_file = "/home/jonas/Downloads/Ac\ Dc\ -\ Highway\ To\ Hell\ \(Pro\).mid";
     global_data.levels.push_back(level);
     global_data.pre_level_text.push_back("Kill the Potatoes!");
     global_data.curr_level_text = global_data.pre_level_text[0];
+  }
+  {
+    LevelData level;
+    level.audio_file = "/home/jonas/Downloads/Untitled.wav";
+    level.midi_file = "/home/jonas/Downloads/Untitled.mid";
+    global_data.levels.push_back(level);
+    global_data.pre_level_text.push_back("Kill the Potatoes again!");
   }
 
   auto first_level = PreLevelScene::createScene(global_data);

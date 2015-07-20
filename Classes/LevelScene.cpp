@@ -9,6 +9,9 @@ USING_NS_CC;
 #include "audio/include/SimpleAudioEngine.h"
 #include <iostream>
 
+const int MOVE_TAG = 1;
+const int TINT_TAG = 2;
+
 Scene* LevelScene::createScene(GlobalData global_data)
 {
     // 'scene' is an autorelease object
@@ -58,8 +61,11 @@ void LevelScene::post_init(GlobalData global_data)
 
   _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
-  note_to_key[35] = EventKeyboard::KeyCode::KEY_A;
-  note_to_string[35] = "A";
+  note_to_key[35] = EventKeyboard::KeyCode::KEY_H;
+  note_to_string[35] = "H";
+
+  note_to_key[36] = EventKeyboard::KeyCode::KEY_H;
+  note_to_string[36] = "H";
 
   note_to_key[40] = EventKeyboard::KeyCode::KEY_D;
   note_to_string[40] = "D";
@@ -183,12 +189,17 @@ void LevelScene::prune_old_notes()
         auto moveToReturn = MoveTo::create(0.1f, cocos2d::Point(mid_w + 100, 250));
 
         auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
+        seq->setTag(MOVE_TAG);
+
+        potato_sprite->stopAllActionsByTag(MOVE_TAG);
         potato_sprite->runAction(seq);
 
         auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
         auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
         auto seq_hero = Sequence::create(tintTo0, tintTo1, nullptr);
+        seq_hero->setTag(TINT_TAG);
 
+        hero_sprite->stopAllActionsByTag(TINT_TAG);
         hero_sprite->runAction(seq_hero);
 
         ns.label->setColor(cocos2d::Color3B(255,0,0));
@@ -310,12 +321,17 @@ void LevelScene::update(float dt)
       auto moveToReturn = MoveTo::create(0.1f, cocos2d::Point(mid_w - 100, 250));
 
       auto seq = Sequence::create(moveToAttack, moveToReturn, nullptr);
+      seq->setTag(MOVE_TAG);
+
+      hero_sprite->stopAllActionsByTag(MOVE_TAG);
       hero_sprite->runAction(seq);
 
       auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
       auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
       auto seq_potato = Sequence::create(tintTo0, tintTo1, nullptr);
+      seq_potato->setTag(TINT_TAG);
 
+      potato_sprite->stopAllActionsByTag(TINT_TAG);
       potato_sprite->runAction(seq_potato);
   }
 
