@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\midifile">
+      <UniqueIdentifier>{28c64d53-1954-4f47-b5b8-e2246fec45ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,6 +24,39 @@
     <ClCompile Include="..\Classes\HelloWorldScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LevelScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MidiReader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NoteSprite.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PreLevelScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\WinningScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\Binasc.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\MidiEvent.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\MidiEventList.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\MidiFile.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\MidiMessage.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\midifile\src-library\Options.cpp">
+      <Filter>src\midifile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -30,6 +66,21 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LevelScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MidiReader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NoteSprite.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PreLevelScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\WinningScene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

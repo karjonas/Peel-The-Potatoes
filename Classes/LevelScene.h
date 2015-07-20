@@ -20,11 +20,10 @@ struct GlobalData
   std::string curr_level_text;
   size_t curr_level_idx = 0;
 
-  static constexpr double c_note_miss_damage = 10.0;
-  static constexpr double c_hold_miss_damage_per_sec = 10.0;
-  static constexpr double c_note_duration = 0.35;
-  static constexpr double c_note_pre_leeway = 0.1;
-
+  const double c_note_miss_damage = 10.0;
+  const double c_hold_miss_damage_per_sec = 10.0;
+  const double c_note_duration = 0.35;
+  const double c_note_pre_leeway = 0.1;
 };
 
 

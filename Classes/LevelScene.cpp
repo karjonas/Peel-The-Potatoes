@@ -180,12 +180,12 @@ void LevelScene::prune_old_notes()
   const double time = accum_time;
   auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
-    if ((ns.note.start_time - GlobalData::c_note_pre_leeway + GlobalData::c_note_duration) < time)
+    if ((ns.note.start_time - global_data.c_note_pre_leeway + global_data.c_note_duration) < time)
     {
       if (!ns.has_hit)
       {
         std::cout << "note missed" << std::endl;
-        player_health -= GlobalData::c_note_miss_damage;
+        player_health -= global_data.c_note_miss_damage;
 
         const Size visibleSize = Director::getInstance()->getVisibleSize();
         const float mid_w = visibleSize.width/2;
@@ -307,7 +307,7 @@ void LevelScene::update(float dt)
 
     if (!hit)
     {
-      player_health -= GlobalData::c_hold_miss_damage_per_sec*static_cast<double>(dt);
+      player_health -= global_data.c_hold_miss_damage_per_sec*static_cast<double>(dt);
 
       auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
       auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
