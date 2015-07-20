@@ -63,12 +63,15 @@ void LevelScene::post_init(GlobalData global_data)
 
   note_to_key[35] = EventKeyboard::KeyCode::KEY_H;
   note_to_string[35] = "H";
+  note_to_offset_idx[35] = -1;
 
   note_to_key[36] = EventKeyboard::KeyCode::KEY_H;
   note_to_string[36] = "H";
+  note_to_offset_idx[36] = -1;
 
   note_to_key[40] = EventKeyboard::KeyCode::KEY_D;
   note_to_string[40] = "D";
+  note_to_offset_idx[40] = 0;
 
   auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
 
@@ -136,9 +139,11 @@ void LevelScene::create_tab_sprite()
   {
     NoteSprite note_sprite;
 
-    auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Marker Felt.ttf",32);
+    auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Marker Felt.ttf", 32);
 
-    label->setPosition(cocos2d::Point(mid_w + note.start_time*pixels_per_sec , 50));
+    const int offset = note_to_offset_idx[note.note_id]*25;
+
+    label->setPosition(cocos2d::Point(mid_w + note.start_time*pixels_per_sec , 50 + offset));
 
     auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
 

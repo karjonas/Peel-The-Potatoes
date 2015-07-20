@@ -62,6 +62,7 @@ public:
 
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
     std::map<int, std::string> note_to_string;
+    std::map<int, int> note_to_offset_idx;
 
     std::vector<Note> current_notes;
 
