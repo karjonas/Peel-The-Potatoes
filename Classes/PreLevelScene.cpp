@@ -48,7 +48,7 @@ void PreLevelScene::post_init(GlobalData global_data)
   const float mid_w = visibleSize.width/2;
 
   {
-    auto level_label =  Label::createWithTTF(global_data.pre_level_text[global_data.curr_level_idx], "fonts/Marker Felt.ttf",32);
+    auto level_label =  Label::createWithTTF(global_data.curr_level_text, "fonts/Marker Felt.ttf",32);
     level_label->setPosition(mid_w,mid_h);
     addChild(level_label, 1);
   }

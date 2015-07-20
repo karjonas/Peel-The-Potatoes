@@ -17,10 +17,14 @@ struct GlobalData
 {
   std::vector<LevelData> levels;
   std::vector<std::string> pre_level_text;
+  std::string curr_level_text;
   size_t curr_level_idx = 0;
 
   static constexpr double c_note_miss_damage = 10.0;
   static constexpr double c_hold_miss_damage_per_sec = 10.0;
+  static constexpr double c_note_duration = 0.35;
+  static constexpr double c_note_pre_leeway = 0.1;
+
 };
 
 
@@ -66,11 +70,13 @@ public:
     cocos2d::Sprite* hero_sprite = nullptr;
     cocos2d::Sprite* potato_sprite = nullptr;
 
-    std::vector<int> missed_notes;
+    std::vector<cocos2d::Label*> old_notes;
 
     double accum_time = 0.0;
 
-    double player_health = 100.0;
+    double player_health = 100000.0;
+
+    double song_end_time = 0.0;
 
     GlobalData global_data;
 };

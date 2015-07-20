@@ -45,6 +45,8 @@ void LevelScene::post_init(GlobalData global_data)
   parsed_file = parse_attack_notes(global_data.levels[global_data.curr_level_idx].midi_file.c_str());
   current_notes = parsed_file.notes;
 
+  song_end_time = parsed_file.notes.back().start_time + 5.0;
+
   // FIXME: Make sure notes are sorted by time
 
   this->scheduleUpdate();
@@ -167,7 +169,7 @@ void LevelScene::prune_old_notes()
   const double time = accum_time;
   auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
-    if ((ns.note.start_time + ns.note.duration) < time)
+    if ((ns.note.start_time - GlobalData::c_note_pre_leeway + GlobalData::c_note_duration) < time)
     {
       if (!ns.has_hit)
       {
@@ -189,9 +191,10 @@ void LevelScene::prune_old_notes()
 
         hero_sprite->runAction(seq_hero);
 
-        //missed_notes.push_back(note.idx);
+        ns.label->setColor(cocos2d::Color3B(255,0,0));
       }
-      ns.label->removeFromParentAndCleanup(true);
+
+      old_notes.push_back(ns.label);
 
       std::cout << "--" << std::endl;
 
@@ -227,21 +230,33 @@ void LevelScene::update(float dt)
   if (song_done)
   {
       auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+      audio->setBackgroundMusicVolume(0.5);
+
+      if (accum_time < song_end_time)
+        return; // Wait some before next level
+
       audio->stopBackgroundMusic(true);
 
       GlobalData global_data_new = global_data;
 
       if (player_health > 0.0)
+      {
         global_data_new.curr_level_idx++;
+
+        if (global_data_new.curr_level_idx < global_data_new.levels.size())
+          global_data_new.curr_level_text = global_data_new.pre_level_text[global_data_new.curr_level_idx];
+      }
+      else
+        global_data_new.curr_level_text = "Try Again";
 
       Scene* next_level;
 
       if (global_data_new.curr_level_idx >= global_data_new.levels.size())
-        next_level = WinningScene::createScene(); // FIXME: Set Winning Screen
+        next_level = WinningScene::createScene();
       else
         next_level = PreLevelScene::createScene(global_data_new);
 
-      Director::getInstance()->replaceScene(TransitionFade::create(1.0, next_level, Color3B(255,255,255)));
+      Director::getInstance()->replaceScene(TransitionFade::create(0.5, next_level, Color3B(255,255,255)));
       return;
   }
 
