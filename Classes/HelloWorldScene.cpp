@@ -64,7 +64,6 @@ void HelloWorld::update(float dt)
     level.midi_file = "/home/jonas/Downloads/Untitled.mid";
     global_data.levels.push_back(level);
     global_data.pre_level_text.push_back("Kill the Potatoes!");
-    global_data.level_attack_damage.push_back(3.0);
   }
 
   auto first_level = PreLevelScene::createScene(global_data);

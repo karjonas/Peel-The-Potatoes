@@ -90,18 +90,6 @@ void LevelScene::post_init(GlobalData global_data)
     potato_sprite->setPosition(cocos2d::Point(mid_w + 100, 250));
     addChild(potato_sprite, 1);
   }
-
-  {
-    hero_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
-    hero_health_label->setPosition(cocos2d::Point(mid_w - 100, 250 + 100));
-    addChild(hero_health_label, 1);
-  }
-
-  {
-    potato_health_label = Label::createWithTTF("100", "fonts/Marker Felt.ttf",32);
-    potato_health_label->setPosition(cocos2d::Point(mid_w + 100, 250 + 100));
-    addChild(potato_health_label, 1);
-  }
 }
 
 void LevelScene::create_tab_sprite()
@@ -185,7 +173,6 @@ void LevelScene::prune_old_notes()
       {
         std::cout << "note missed" << std::endl;
         player_health -= GlobalData::c_note_miss_damage;
-        hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
 
         const Size visibleSize = Director::getInstance()->getVisibleSize();
         const float mid_w = visibleSize.width/2;
@@ -235,7 +222,7 @@ void LevelScene::update(float dt)
 
   prune_old_notes();
 
-  const bool song_done = potato_health <= 0.0 || player_health <= 0.0;
+  const bool song_done = player_health <= 0.0 || note_sprites.empty();
 
   if (song_done)
   {
@@ -254,7 +241,7 @@ void LevelScene::update(float dt)
       else
         next_level = PreLevelScene::createScene(global_data_new);
 
-      Director::getInstance()->replaceScene(next_level);
+      Director::getInstance()->replaceScene(TransitionFade::create(1.0, next_level, Color3B(255,255,255)));
       return;
   }
 
@@ -281,9 +268,6 @@ void LevelScene::update(float dt)
           note_sprite.has_hit = true;
           note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
 
-          potato_health -= global_data.level_attack_damage[global_data.curr_level_idx];
-          potato_health_label->setString(std::to_string(static_cast<int>(potato_health)));
-
           std::cout << "HIT" << std::endl;
         }
         hit = true;
@@ -293,7 +277,6 @@ void LevelScene::update(float dt)
     if (!hit)
     {
       player_health -= GlobalData::c_hold_miss_damage_per_sec*static_cast<double>(dt);
-      hero_health_label->setString(std::to_string(static_cast<int>(player_health)));
 
       auto tintTo0 = TintTo::create(0.1f, 255.0f, 0.0f, 0.0f);
       auto tintTo1 = TintTo::create(0.1f, 255.0f, 255.0f, 255.0f);
