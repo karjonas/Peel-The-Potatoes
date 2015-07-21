@@ -5,7 +5,6 @@
 
 USING_NS_CC;
 
-#include "audio/include/SimpleAudioEngine.h"
 #include <iostream>
 
 Scene* HelloWorld::createScene()
@@ -56,8 +55,6 @@ void HelloWorld::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 void HelloWorld::update(float dt)
 {
-  auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-
   GlobalData global_data;
 
   {
@@ -84,9 +81,6 @@ void HelloWorld::update(float dt)
     global_data.levels.push_back(level);
     global_data.pre_level_text.push_back("All potatoes must fall!");
   }
-
-  for (auto& level : global_data.levels)
-    audio->preloadBackgroundMusic(level.audio_file.c_str());
 
   auto first_level = PreLevelScene::createScene(global_data);
   Director::getInstance()->replaceScene(first_level);

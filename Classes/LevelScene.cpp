@@ -7,11 +7,14 @@
 USING_NS_CC;
 
 #include "audio/include/SimpleAudioEngine.h"
+#include "audio/include/AudioEngine.h"
 #include <iostream>
 #include <CCFileUtils.h>
 
 const int MOVE_TAG = 1;
 const int TINT_TAG = 2;
+
+using namespace cocos2d::experimental;
 
 Scene* LevelScene::createScene(GlobalData global_data)
 {
@@ -93,14 +96,11 @@ void LevelScene::post_init(GlobalData global_data)
   note_to_string[43] = "E";
   note_to_offset_idx[43] = 1;
 
-  auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-  audio->playBackgroundMusic(global_data.levels[global_data.curr_level_idx].audio_file.c_str(), false);
-  audio->pauseBackgroundMusic();
+  audio_id = AudioEngine::play2d(global_data.levels[global_data.curr_level_idx].audio_file.c_str(), false, 1.0);
 
   const Size visibleSize = Director::getInstance()->getVisibleSize();
   const float mid_h = visibleSize.height/2;
   const float mid_w = visibleSize.width/2;
-
 
   {
     auto sprite = cocos2d::Sprite::create("background.png");
@@ -139,20 +139,46 @@ void LevelScene::create_tab_sprite()
   const double secs_per_quarter =
       parsed_file.ticks_per_quarter_note * parsed_file.seconds_per_tick;
 
-  const size_t num_lines = max_song_length_secs/secs_per_quarter;
+  const size_t num_lines = 10;
 
-  for (size_t i = 0; i < num_lines; i++)
+  const double width_in_pixels = secs_per_quarter*pixels_per_sec;
+
   {
+    line_holder = cocos2d::Sprite::create("line_tall.png");
+    line_holder->setAnchorPoint(Vec2(0.5,0.5));
+    line_holder->setPosition(mid_w, 51);
+  
+    addChild(line_holder, 1);
+  
+    auto moveByStart = MoveBy::create(2 * secs_per_quarter, Vec2(-2 * pixels_per_sec*secs_per_quarter, 0));
+    auto moveToEnd = MoveTo::create(0.0f, Vec2(mid_w, 51));
+    auto seq = Sequence::create(moveByStart, moveToEnd, nullptr);
+  
+    line_holder->runAction(RepeatForever::create(seq));
+  }
 
-    auto sprite = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png") ;
+  for (size_t i = 1; i < num_lines; i++)
+  {
+      auto sprite0 = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png");
+      auto sprite1 = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png");
 
-    sprite->setPosition(cocos2d::Point(mid_w + i*secs_per_quarter*pixels_per_sec , 51));
+      const double start_x0 = (i*width_in_pixels);
+      const double start_y0 = 0;
 
-    auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+      const double start_x1 = (-static_cast<double>(i)*width_in_pixels);
+      const double start_y1 = 0;
 
-    sprite->runAction(moveBy);
+      sprite0->setAnchorPoint(Vec2(0, 0));
+      sprite1->setAnchorPoint(Vec2(0, 0));
 
-    addChild(sprite, 1);
+      sprite0->setPosition(cocos2d::Point(start_x0, start_y0));
+      sprite1->setPosition(cocos2d::Point(start_x1, start_y1));
+
+      line_holder->addChild(sprite0, 1);
+      line_holder->addChild(sprite1, 1);
+
+      lines.push_back(sprite0);
+      lines.push_back(sprite1);
   }
 
   for (const Note& note : current_notes)
@@ -176,6 +202,7 @@ void LevelScene::create_tab_sprite()
     note_sprites.push_back(note_sprite);
   }
 
+  finished_note_sprites.reserve(note_sprites.size());
 }
 
 std::vector<int> LevelScene::get_current_note_sprite_indices() const
@@ -185,7 +212,7 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
   size_t idx = 0;
   for (auto note_sprite : note_sprites)
   {
-    if ((note_sprite.note.start_time - global_data.c_note_pre_leeway) <= accum_time)
+    if ((note_sprite.note.start_time - global_data.c_note_pre_leeway) <= curr_time)
       indices.push_back(idx);
     else
       break;
@@ -197,7 +224,7 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
 
 void LevelScene::prune_old_notes()
 {
-  const double time = accum_time;
+  const double time = curr_time;
   auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
     if ((ns.note.start_time + global_data.c_note_duration) < time)
@@ -227,6 +254,7 @@ void LevelScene::prune_old_notes()
         hero_sprite->runAction(seq_hero);
 
         ns.label->setColor(cocos2d::Color3B(255,0,0));
+        finished_note_sprites.push_back(ns);
       }
 
       old_notes.push_back(ns.label);
@@ -254,10 +282,76 @@ void LevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 void LevelScene::update(float dt)
 {
-  auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-  audio->resumeBackgroundMusic();
+    AudioEngine::AudioState state = AudioEngine::getState(audio_id);
+    curr_time = AudioEngine::getCurrentTime(audio_id);
+    accum_time_since_sync += static_cast<double>(dt);
+    const double diff_now = abs(curr_time - accum_time_since_sync);
 
-  accum_time += static_cast<double>(dt);
+    if (state == AudioEngine::AudioState::PLAYING && diff_now > 0.1 && diff_last > 0.1)
+    {
+      const int max_song_length_secs = 10 * 60;
+      const int pixels_per_sec = 200;
+      
+      const double secs_per_quarter =
+          parsed_file.ticks_per_quarter_note * parsed_file.seconds_per_tick;
+      
+      const size_t num_lines = lines.size();
+      
+      const Size visibleSize = Director::getInstance()->getVisibleSize();
+      const float mid_h = visibleSize.height / 2;
+      const float mid_w = visibleSize.width / 2;
+      
+      const double moved_pixels = pixels_per_sec*curr_time;
+      const double width_in_pixels = secs_per_quarter*pixels_per_sec;
+
+      const int num_cycles = static_cast<int>(moved_pixels / (2*width_in_pixels));
+      const double offset = moved_pixels - (2*width_in_pixels*num_cycles);
+
+      {
+          line_holder->setPosition(-offset + mid_w, 51);
+
+          line_holder->stopAllActions();
+          auto moveByStart = MoveBy::create(2 * secs_per_quarter, Vec2(-2 * pixels_per_sec*secs_per_quarter, 0));
+          auto moveToEnd = MoveTo::create(0.0f, Vec2(-offset + mid_w, 51));
+          auto seq = Sequence::create(moveByStart, moveToEnd, nullptr);
+
+          line_holder->runAction(RepeatForever::create(seq));
+      }
+
+      for (const NoteSprite& note : note_sprites)
+      {
+          const double orig = mid_w + note.note.start_time*pixels_per_sec;
+          auto label = note.label;
+      
+          const int offset = note_to_offset_idx[note.note.note_id] * 25;
+      
+          note.label->stopAllActions();
+          auto moveTo = MoveTo::create(0.0f, Vec2(orig - moved_pixels, 50 + offset));
+          auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+          auto seq = Sequence::create(moveTo, moveBy, nullptr);
+          note.label->runAction(seq);
+      }
+
+      for (const NoteSprite& note : finished_note_sprites)
+      {
+          const double orig = mid_w + note.note.start_time*pixels_per_sec;
+          auto label = note.label;
+
+          const int offset = note_to_offset_idx[note.note.note_id] * 25;
+
+          note.label->stopAllActions();
+          auto moveTo = MoveTo::create(0.0f, Vec2(orig - moved_pixels, 50 + offset));
+          auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
+          auto seq = Sequence::create(moveTo, moveBy, nullptr);
+          note.label->runAction(seq);
+      }
+
+      accum_time_since_sync = curr_time;
+
+      log("Re-sync to audio");
+  }
+
+  diff_last = diff_now;
 
   prune_old_notes();
 
@@ -265,13 +359,12 @@ void LevelScene::update(float dt)
 
   if (song_done)
   {
-      auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-      audio->setBackgroundMusicVolume(0.5);
+      AudioEngine::setVolume(audio_id, 0.5);
 
-      if (note_sprites.empty() && (accum_time < song_end_time))
+      if (note_sprites.empty() && (curr_time < song_end_time))
         return; // Wait some before next level
 
-      audio->stopBackgroundMusic(true);
+      AudioEngine::stop(audio_id);
 
       GlobalData global_data_new = global_data;
 

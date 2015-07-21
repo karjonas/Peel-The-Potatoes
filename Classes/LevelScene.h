@@ -6,6 +6,8 @@
 #include "MidiReader.h"
 #include "NoteSprite.h"
 
+#include "audio/include/AudioEngine.h"
+
 struct LevelData
 {
   std::string pre_level_text = "";
@@ -53,7 +55,6 @@ public:
     std::vector<int> get_current_note_sprite_indices() const;
     void prune_old_notes();
 
-
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
 
@@ -66,19 +67,26 @@ public:
     std::vector<Note> current_notes;
 
     std::vector<NoteSprite> note_sprites;
+    std::vector<NoteSprite> finished_note_sprites;
+
+    std::vector<cocos2d::Sprite*> lines;
+    cocos2d::Sprite* line_holder = nullptr;
 
     cocos2d::Sprite* hero_sprite = nullptr;
     cocos2d::Sprite* potato_sprite = nullptr;
 
     std::vector<cocos2d::Label*> old_notes;
 
-    double accum_time = 0.0;
+    double curr_time = 0.0;
+    double accum_time_since_sync = 0.0;
 
     double player_health = 100;
-
     double song_end_time = 0.0;
+    double diff_last = 0.0;
 
     GlobalData global_data;
+
+    int audio_id = -1;
 };
 
 #endif // __LEVEL_SCENE_H__

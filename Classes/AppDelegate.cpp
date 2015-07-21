@@ -1,8 +1,11 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "audio/include/SimpleAudioEngine.h"
+#include "audio/include/AudioEngine.h"
 
 USING_NS_CC;
+
+using namespace cocos2d::experimental;
 
 AppDelegate::AppDelegate() {
 
@@ -56,11 +59,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
 // This function will be called when the app is inactive. When comes a phone call,it's be invoked too
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
-    CocosDenshion::SimpleAudioEngine::getInstance()->pauseBackgroundMusic();
+
+    AudioEngine::pauseAll();
 }
 
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
-    CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
+
+    AudioEngine::resumeAll();
 }
