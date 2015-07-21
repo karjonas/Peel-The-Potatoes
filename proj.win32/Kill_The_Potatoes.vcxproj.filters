@@ -11,7 +11,7 @@
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\midifile">
-      <UniqueIdentifier>{28c64d53-1954-4f47-b5b8-e2246fec45ad}</UniqueIdentifier>
+      <UniqueIdentifier>{f3652afe-2463-49c9-a9c5-918e2e810058}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

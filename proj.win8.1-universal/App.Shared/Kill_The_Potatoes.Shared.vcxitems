@@ -5,7 +5,7 @@
     <HasSharedItems>true</HasSharedItems>
     <SharedGUID>e956c24b-f04e-47bf-bf00-746681ae1301</SharedGUID>
     <ItemsProjectGuid>{a3ad93e4-0b2f-4c58-9181-69bed2e42e3e}</ItemsProjectGuid>
-    <ItemsRootNamespace>InsanityJam2015</ItemsRootNamespace>
+    <ItemsRootNamespace>Kill_The_Potatoes</ItemsRootNamespace>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
@@ -27,7 +27,6 @@
       <DependentUpon>$(MSBuildThisFileDirectory)OpenGLESPage.xaml</DependentUpon>
     </ClCompile>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\AppDelegate.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\AppMacros.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\Classes\HelloWorldScene.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)App.xaml.h">
       <DependentUpon>$(MSBuildThisFileDirectory)App.xaml</DependentUpon>
@@ -35,6 +34,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Cocos2dRenderer.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OpenGLES.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)OpenGLESPage.xaml.h">
       <DependentUpon>$(MSBuildThisFileDirectory)OpenGLESPage.xaml</DependentUpon>
