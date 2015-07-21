@@ -74,7 +74,7 @@ public:
 
     double accum_time = 0.0;
 
-    double player_health = 100000.0;
+    double player_health = 100;
 
     double song_end_time = 0.0;
 
