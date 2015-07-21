@@ -188,7 +188,6 @@ void LevelScene::prune_old_notes()
     {
       if (!ns.has_hit)
       {
-        std::cout << "note missed" << std::endl;
         player_health -= global_data.c_note_miss_damage;
 
         const Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -215,8 +214,6 @@ void LevelScene::prune_old_notes()
       }
 
       old_notes.push_back(ns.label);
-
-      std::cout << "--" << std::endl;
 
       return true;
     }
@@ -305,8 +302,6 @@ void LevelScene::update(float dt)
           attack = true;
           note_sprite.has_hit = true;
           note_sprite.label->setColor(cocos2d::Color3B(0,255,0));
-
-          std::cout << "HIT" << std::endl;
         }
         hit = true;
       }
