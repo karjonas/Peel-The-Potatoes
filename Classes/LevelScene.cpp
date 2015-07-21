@@ -252,7 +252,7 @@ void LevelScene::update(float dt)
       auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
       audio->setBackgroundMusicVolume(0.5);
 
-      if (accum_time < song_end_time)
+      if (note_sprites.empty() && (accum_time < song_end_time))
         return; // Wait some before next level
 
       audio->stopBackgroundMusic(true);
