@@ -77,6 +77,22 @@ void LevelScene::post_init(GlobalData global_data)
   note_to_string[40] = "D";
   note_to_offset_idx[40] = 0;
 
+  note_to_key[38] = EventKeyboard::KeyCode::KEY_D;
+  note_to_string[38] = "D";
+  note_to_offset_idx[38] = 0;
+
+  note_to_key[49] = EventKeyboard::KeyCode::KEY_S;
+  note_to_string[49] = "S";
+  note_to_offset_idx[49] = 1;
+
+  note_to_key[45] = EventKeyboard::KeyCode::KEY_W;
+  note_to_string[45] = "W";
+  note_to_offset_idx[45] = 1;
+
+  note_to_key[43] = EventKeyboard::KeyCode::KEY_E;
+  note_to_string[43] = "E";
+  note_to_offset_idx[43] = 1;
+
   auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
   audio->playBackgroundMusic(global_data.levels[global_data.curr_level_idx].audio_file.c_str(), false);
   audio->pauseBackgroundMusic();

@@ -75,6 +75,14 @@ void HelloWorld::update(float dt)
     global_data.pre_level_text.push_back("The potatoes are resilient!");
   }
 
+  {
+      LevelData level;
+      level.audio_file = "Kiss - Heaven's On Fire (Pro).wav";
+      level.midi_file = "Kiss - Heaven's On Fire (Pro).mid";
+      global_data.levels.push_back(level);
+      global_data.pre_level_text.push_back("All potatoes must fall!");
+  }
+
   auto first_level = PreLevelScene::createScene(global_data);
   Director::getInstance()->replaceScene(first_level);
 }
