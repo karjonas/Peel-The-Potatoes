@@ -26,6 +26,7 @@ public:
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 
     GlobalData global_data;
+    bool replace_scene = false;
 };
 
 #endif // __PRELEVEL_SCENE_H__

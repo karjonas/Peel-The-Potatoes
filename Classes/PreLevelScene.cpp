@@ -62,8 +62,12 @@ void PreLevelScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
 void PreLevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-  Scene* next_level = LevelScene::createScene(global_data);
-  Director::getInstance()->replaceScene(TransitionFade::create(0.5, next_level, Color3B(255,255,255)));
+  if (!replace_scene)
+  {
+    replace_scene = true;
+    Scene* next_level = LevelScene::createScene(global_data);
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5, next_level, Color3B(255,255,255)));
+  }
 }
 
 void PreLevelScene::menuCloseCallback(Ref* pSender)
