@@ -74,8 +74,8 @@ void LevelScene::post_init(GlobalData global_data)
   note_to_offset_idx[40] = 0;
 
   auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
-
   audio->playBackgroundMusic(global_data.levels[global_data.curr_level_idx].audio_file.c_str(), false);
+  audio->pauseBackgroundMusic();
 
   const Size visibleSize = Director::getInstance()->getVisibleSize();
   const float mid_h = visibleSize.height/2;
@@ -237,6 +237,9 @@ void LevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 void LevelScene::update(float dt)
 {
+  auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+  audio->resumeBackgroundMusic();
+
   accum_time += static_cast<double>(dt);
 
   prune_old_notes();
