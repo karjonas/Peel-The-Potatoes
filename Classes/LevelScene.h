@@ -77,7 +77,6 @@ public:
 
     std::vector<cocos2d::Label*> old_notes;
 
-    double curr_time = 0.0;
     double accum_time_since_sync = 0.0;
 
     double player_health = 100;

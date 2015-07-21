@@ -212,7 +212,7 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
   size_t idx = 0;
   for (auto note_sprite : note_sprites)
   {
-    if ((note_sprite.note.start_time - global_data.c_note_pre_leeway) <= curr_time)
+    if ((note_sprite.note.start_time - global_data.c_note_pre_leeway) <= accum_time_since_sync)
       indices.push_back(idx);
     else
       break;
@@ -224,7 +224,7 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
 
 void LevelScene::prune_old_notes()
 {
-  const double time = curr_time;
+  const double time = accum_time_since_sync;
   auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
     if ((ns.note.start_time + global_data.c_note_duration) < time)
@@ -254,8 +254,9 @@ void LevelScene::prune_old_notes()
         hero_sprite->runAction(seq_hero);
 
         ns.label->setColor(cocos2d::Color3B(255,0,0));
-        finished_note_sprites.push_back(ns);
       }
+
+      finished_note_sprites.push_back(ns);
 
       old_notes.push_back(ns.label);
 
@@ -283,11 +284,11 @@ void LevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 void LevelScene::update(float dt)
 {
     AudioEngine::AudioState state = AudioEngine::getState(audio_id);
-    curr_time = AudioEngine::getCurrentTime(audio_id);
+    double curr_time = AudioEngine::getCurrentTime(audio_id);
     accum_time_since_sync += static_cast<double>(dt);
     const double diff_now = abs(curr_time - accum_time_since_sync);
 
-    if (state == AudioEngine::AudioState::PLAYING && diff_now > 0.1 && diff_last > 0.1)
+    if (state == AudioEngine::AudioState::PLAYING && curr_time > 0.0f && diff_now > 0.1 && diff_last > 0.1)
     {
       const int max_song_length_secs = 10 * 60;
       const int pixels_per_sec = 200;
@@ -361,7 +362,7 @@ void LevelScene::update(float dt)
   {
       AudioEngine::setVolume(audio_id, 0.5);
 
-      if (note_sprites.empty() && (curr_time < song_end_time))
+      if (note_sprites.empty() && (accum_time_since_sync < song_end_time))
         return; // Wait some before next level
 
       AudioEngine::stop(audio_id);
