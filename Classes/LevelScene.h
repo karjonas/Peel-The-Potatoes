@@ -22,8 +22,8 @@ struct GlobalData
 
   double c_note_miss_damage = 10.0;
   double c_hold_miss_damage_per_sec = 10.0;
-  double c_note_duration = 0.35;
-  double c_note_pre_leeway = 0.1;
+  double c_note_duration = 0.2;
+  double c_note_pre_leeway = 0.05;
 };
 
 
