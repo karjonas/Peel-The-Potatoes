@@ -169,8 +169,8 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
   size_t idx = 0;
   for (auto note_sprite : note_sprites)
   {
-    if (note_sprite.note.start_time <= accum_time)
-     indices.push_back(idx);
+    if ((note_sprite.note.start_time - global_data.c_note_pre_leeway) <= accum_time)
+      indices.push_back(idx);
     else
       break;
     idx++;
@@ -184,7 +184,7 @@ void LevelScene::prune_old_notes()
   const double time = accum_time;
   auto remove_it = std::remove_if(note_sprites.begin(), note_sprites.end(), [&](NoteSprite& ns)
   {
-    if ((ns.note.start_time - global_data.c_note_pre_leeway + global_data.c_note_duration) < time)
+    if ((ns.note.start_time + global_data.c_note_duration) < time)
     {
       if (!ns.has_hit)
       {
