@@ -8,6 +8,7 @@ USING_NS_CC;
 
 #include "audio/include/SimpleAudioEngine.h"
 #include <iostream>
+#include <CCFileUtils.h>
 
 const int MOVE_TAG = 1;
 const int TINT_TAG = 2;
@@ -45,7 +46,10 @@ bool LevelScene::init()
 void LevelScene::post_init(GlobalData global_data)
 {
   this->global_data = global_data;
-  parsed_file = parse_attack_notes(global_data.levels[global_data.curr_level_idx].midi_file.c_str());
+
+  auto futils = FileUtils::getInstance();
+  const std::string path = futils->fullPathForFilename(global_data.levels[global_data.curr_level_idx].midi_file);
+  parsed_file = parse_attack_notes(path.c_str());
   current_notes = parsed_file.notes;
 
   song_end_time = parsed_file.notes.back().start_time + 5.0;
