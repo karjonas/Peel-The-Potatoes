@@ -54,7 +54,9 @@ void WinningScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 
 void WinningScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 {
-  if(keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
+  if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE
+      || keyCode == EventKeyboard::KeyCode::KEY_SPACE
+      || keyCode == EventKeyboard::KeyCode::KEY_ENTER)
     Director::getInstance()->end();
 }
 
