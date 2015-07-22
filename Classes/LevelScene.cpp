@@ -121,6 +121,9 @@ void LevelScene::post_init(GlobalData global_data)
     potato_sprite->setPosition(cocos2d::Point(mid_w + 100, 250));
     addChild(potato_sprite, 1);
   }
+
+  if (godmode)
+    player_health = 9999999;
 }
 
 void LevelScene::create_tab_sprite()
@@ -185,7 +188,7 @@ void LevelScene::create_tab_sprite()
   {
     NoteSprite note_sprite;
 
-    auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Marker Felt.ttf", 32);
+    auto label = Label::createWithTTF(note_to_string[note.note_id], "fonts/Xolonium-Bold.otf", 32);
 
     const int offset = note_to_offset_idx[note.note_id]*25;
 

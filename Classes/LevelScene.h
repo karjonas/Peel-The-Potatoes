@@ -86,6 +86,8 @@ public:
     GlobalData global_data;
 
     int audio_id = -1;
+
+    const bool godmode = false;
 };
 
 #endif // __LEVEL_SCENE_H__
