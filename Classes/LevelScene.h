@@ -71,6 +71,7 @@ public:
 
     std::vector<cocos2d::Sprite*> lines;
     cocos2d::Sprite* line_holder = nullptr;
+    cocos2d::Sprite* notes_holder = nullptr;
 
     cocos2d::Sprite* hero_sprite = nullptr;
     cocos2d::Sprite* potato_sprite = nullptr;

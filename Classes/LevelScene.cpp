@@ -184,6 +184,19 @@ void LevelScene::create_tab_sprite()
       lines.push_back(sprite1);
   }
 
+  {
+      notes_holder = cocos2d::Sprite::create();
+      notes_holder->setAnchorPoint(Vec2(0.5, 0.5));
+      notes_holder->setPosition(mid_w, 51);
+
+      addChild(notes_holder, 1);
+
+      auto moveByStart = MoveBy::create(secs_per_quarter, Vec2(-pixels_per_sec*secs_per_quarter, 0));
+      auto seq = Sequence::create(moveByStart, nullptr);
+
+      notes_holder->runAction(RepeatForever::create(seq));
+  }
+
   for (const Note& note : current_notes)
   {
     NoteSprite note_sprite;
@@ -192,13 +205,9 @@ void LevelScene::create_tab_sprite()
 
     const int offset = note_to_offset_idx[note.note_id]*25;
 
-    label->setPosition(cocos2d::Point(mid_w + note.start_time*pixels_per_sec , 50 + offset));
+    label->setPosition(cocos2d::Point(note.start_time*pixels_per_sec , offset));
 
-    auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
-
-    label->runAction(moveBy);
-
-    addChild(label, 1);
+    notes_holder->addChild(label, 1);
 
     note_sprite.note = note;
     note_sprite.label = label;
@@ -322,33 +331,7 @@ void LevelScene::update(float dt)
           line_holder->runAction(RepeatForever::create(seq));
       }
 
-      for (const NoteSprite& note : note_sprites)
-      {
-          const double orig = mid_w + note.note.start_time*pixels_per_sec;
-          auto label = note.label;
-      
-          const int offset = note_to_offset_idx[note.note.note_id] * 25;
-      
-          note.label->stopAllActions();
-          auto moveTo = MoveTo::create(0.0f, Vec2(orig - moved_pixels, 50 + offset));
-          auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
-          auto seq = Sequence::create(moveTo, moveBy, nullptr);
-          note.label->runAction(seq);
-      }
-
-      for (const NoteSprite& note : finished_note_sprites)
-      {
-          const double orig = mid_w + note.note.start_time*pixels_per_sec;
-          auto label = note.label;
-
-          const int offset = note_to_offset_idx[note.note.note_id] * 25;
-
-          note.label->stopAllActions();
-          auto moveTo = MoveTo::create(0.0f, Vec2(orig - moved_pixels, 50 + offset));
-          auto moveBy = MoveBy::create(max_song_length_secs, Vec2(-pixels_per_sec*max_song_length_secs, 0));
-          auto seq = Sequence::create(moveTo, moveBy, nullptr);
-          note.label->runAction(seq);
-      }
+      notes_holder->setPosition(mid_w - moved_pixels, 51);
 
       accum_time_since_sync = curr_time;
 
