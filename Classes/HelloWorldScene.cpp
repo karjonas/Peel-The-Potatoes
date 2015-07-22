@@ -62,7 +62,7 @@ void HelloWorld::update(float dt)
     level.audio_file = "Ac Dc - Back In Black (Pro).mp3";
     level.midi_file = "Ac Dc - Back In Black (Pro).mid";
     global_data.levels.push_back(level);
-    global_data.pre_level_text.push_back("Peal the Potatoes!");
+    global_data.pre_level_text.push_back("Peel the Potatoes!");
     global_data.curr_level_text = global_data.pre_level_text[0];
   }
 
