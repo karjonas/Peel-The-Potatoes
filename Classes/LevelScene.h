@@ -8,6 +8,8 @@
 
 #include "audio/include/AudioEngine.h"
 
+#include <list>
+
 struct LevelData
 {
   std::string pre_level_text = "";
@@ -89,6 +91,9 @@ public:
     int audio_id = -1;
 
     const bool godmode = false;
+    const double resync_threshold = 0.2;
+
+    std::list<double> last_diffs;
 };
 
 #endif // __LEVEL_SCENE_H__

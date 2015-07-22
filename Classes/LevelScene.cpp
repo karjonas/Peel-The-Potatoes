@@ -124,6 +124,9 @@ void LevelScene::post_init(GlobalData global_data)
 
   if (godmode)
     player_health = 9999999;
+
+  for (int i = 0; i < 10; i++)
+    last_diffs.push_back(0.0);
 }
 
 void LevelScene::create_tab_sprite()
@@ -300,7 +303,17 @@ void LevelScene::update(float dt)
     accum_time_since_sync += static_cast<double>(dt);
     const double diff_now = abs(curr_time - accum_time_since_sync);
 
-    if (state == AudioEngine::AudioState::PLAYING && curr_time > 0.0f && diff_now > 0.1 && diff_last > 0.1)
+    last_diffs.pop_back();
+    last_diffs.push_front(diff_now);
+
+    double diff_avg = 0.0;
+    const double num_diffs = static_cast<double>(last_diffs.size());
+    for (double diff : last_diffs)
+        diff_avg += diff;
+
+    diff_avg /= num_diffs;
+
+    if (state == AudioEngine::AudioState::PLAYING && curr_time > 0.0f && diff_avg > resync_threshold)
     {
       const int max_song_length_secs = 10 * 60;
       const int pixels_per_sec = 200;
@@ -332,6 +345,10 @@ void LevelScene::update(float dt)
       }
 
       notes_holder->setPosition(mid_w - moved_pixels, 51);
+
+      last_diffs.clear();
+      for (int i = 0; i < 10; i++)
+          last_diffs.push_back(0.0);
 
       accum_time_since_sync = curr_time;
 
