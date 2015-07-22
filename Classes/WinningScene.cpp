@@ -39,7 +39,7 @@ bool WinningScene::init()
     const float mid_h = visibleSize.height/2;
     const float mid_w = visibleSize.width/2;
 
-    auto label = Label::createWithTTF("CONGRATULATIONS!", "fonts/Marker Felt.ttf", 32);
+    auto label = Label::createWithTTF("CONGRATULATIONS!", "fonts/Xolonium-Bold.otf", 32);
     label->setPosition(cocos2d::Point(mid_w, mid_h));
     addChild(label, 1);
   }
