@@ -103,7 +103,7 @@ void LevelScene::post_init(GlobalData global_data)
   const float mid_w = visibleSize.width/2;
 
   {
-    auto sprite = cocos2d::Sprite::create("background.png");
+    auto sprite = cocos2d::Sprite::create("pics/background.png");
     sprite->setPosition(cocos2d::Point(mid_w, mid_h));
     addChild(sprite, 1);
   }
@@ -111,13 +111,13 @@ void LevelScene::post_init(GlobalData global_data)
   create_tab_sprite();
 
   {
-    hero_sprite = cocos2d::Sprite::create("hero.png");
+    hero_sprite = cocos2d::Sprite::create("pics/hero.png");
     hero_sprite->setPosition(cocos2d::Point(mid_w - 100, 250));
     addChild(hero_sprite, 1);
   }
 
   {
-    potato_sprite = cocos2d::Sprite::create("potato.png");
+    potato_sprite = cocos2d::Sprite::create("pics/potato.png");
     potato_sprite->setPosition(cocos2d::Point(mid_w + 100, 250));
     addChild(potato_sprite, 1);
   }
@@ -150,7 +150,7 @@ void LevelScene::create_tab_sprite()
   const double width_in_pixels = secs_per_quarter*pixels_per_sec;
 
   {
-    line_holder = cocos2d::Sprite::create("line_tall.png");
+    line_holder = cocos2d::Sprite::create("pics/line_tall.png");
     line_holder->setAnchorPoint(Vec2(0.5,0.5));
     line_holder->setPosition(mid_w, 51);
   
@@ -165,8 +165,8 @@ void LevelScene::create_tab_sprite()
 
   for (size_t i = 1; i < num_lines; i++)
   {
-      auto sprite0 = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png");
-      auto sprite1 = (i % 2 == 0) ? cocos2d::Sprite::create("line_tall.png") : cocos2d::Sprite::create("line_short.png");
+      auto sprite0 = (i % 2 == 0) ? cocos2d::Sprite::create("pics/line_tall.png") : cocos2d::Sprite::create("pics/line_short.png");
+      auto sprite1 = (i % 2 == 0) ? cocos2d::Sprite::create("pics/line_tall.png") : cocos2d::Sprite::create("pics/line_short.png");
 
       const double start_x0 = (i*width_in_pixels);
       const double start_y0 = 0;
