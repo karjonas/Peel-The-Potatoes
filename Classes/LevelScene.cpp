@@ -253,16 +253,17 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
 
 void LevelScene::update_health_bar()
 {
+  auto tex_cache = CCTextureCache::sharedTextureCache();
   const int num_hearts = hearts.size();
   for (int i = 0; i < num_hearts; i++)
   {
     const double heart_health = i*10;
     if (player_health > (heart_health + 5))
-      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_full.png"));
+      hearts[i]->setTexture(tex_cache->addImage("pics/heart_full.png"));
     else if (player_health <= heart_health)
-      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_empty.png"));
+      hearts[i]->setTexture(tex_cache->addImage("pics/heart_empty.png"));
     else
-      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_half.png"));
+      hearts[i]->setTexture(tex_cache->addImage("pics/heart_half.png"));
   }
 }
 
