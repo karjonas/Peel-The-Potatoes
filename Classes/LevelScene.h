@@ -56,6 +56,7 @@ public:
     void create_tab_sprite();
     std::vector<int> get_current_note_sprite_indices() const;
     void prune_old_notes();
+    void update_health_bar();
 
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
@@ -74,6 +75,8 @@ public:
     std::vector<cocos2d::Sprite*> lines;
     cocos2d::Sprite* line_holder = nullptr;
     cocos2d::Sprite* notes_holder = nullptr;
+    cocos2d::Sprite* hearts_holder = nullptr;
+    std::vector<cocos2d::Sprite*> hearts;
 
     cocos2d::Sprite* hero_sprite = nullptr;
     cocos2d::Sprite* potato_sprite = nullptr;

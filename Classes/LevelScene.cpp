@@ -217,6 +217,20 @@ void LevelScene::create_tab_sprite()
     note_sprites.push_back(note_sprite);
   }
 
+  {
+    hearts_holder = cocos2d::Sprite::create();
+    hearts_holder->setAnchorPoint(Vec2(0.5, 0.5));
+    hearts_holder->setPosition(10, visibleSize.height - 10);
+    addChild(hearts_holder, 1);
+  }
+
+  for (int i = 0; i < 10; i++)
+  {
+    auto sprite = cocos2d::Sprite::create("pics/heart_full.png");
+    sprite->setPosition(0 + i *16, 0);
+    hearts_holder->addChild(sprite);
+    hearts.push_back(sprite);
+  }
   finished_note_sprites.reserve(note_sprites.size());
 }
 
@@ -235,6 +249,21 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
   }
 
   return indices;
+}
+
+void LevelScene::update_health_bar()
+{
+  const int num_hearts = hearts.size();
+  for (int i = 0; i < num_hearts; i++)
+  {
+    const double heart_health = i*10;
+    if (player_health > (heart_health + 5))
+      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_full.png"));
+    else if (player_health <= heart_health)
+      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_empty.png"));
+    else
+      hearts[i]->setTexture(CCTextureCache::sharedTextureCache()->addImage("pics/heart_half.png"));
+  }
 }
 
 void LevelScene::prune_old_notes()
@@ -298,66 +327,68 @@ void LevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 void LevelScene::update(float dt)
 {
-    AudioEngine::AudioState state = AudioEngine::getState(audio_id);
-    double curr_time = AudioEngine::getCurrentTime(audio_id);
-    accum_time_since_sync += static_cast<double>(dt);
-    const double diff_now = abs(curr_time - accum_time_since_sync);
+  AudioEngine::AudioState state = AudioEngine::getState(audio_id);
+  double curr_time = AudioEngine::getCurrentTime(audio_id);
+  accum_time_since_sync += static_cast<double>(dt);
+  const double diff_now = abs(curr_time - accum_time_since_sync);
 
-    last_diffs.pop_back();
-    last_diffs.push_front(diff_now);
+  last_diffs.pop_back();
+  last_diffs.push_front(diff_now);
 
-    double diff_avg = 0.0;
-    const double num_diffs = static_cast<double>(last_diffs.size());
-    for (double diff : last_diffs)
-        diff_avg += diff;
+  double diff_avg = 0.0;
+  const double num_diffs = static_cast<double>(last_diffs.size());
+  for (double diff : last_diffs)
+      diff_avg += diff;
 
-    diff_avg /= num_diffs;
+  diff_avg /= num_diffs;
 
-    if (state == AudioEngine::AudioState::PLAYING && curr_time > 0.0f && diff_avg > resync_threshold)
+  if (state == AudioEngine::AudioState::PLAYING && curr_time > 0.0f && diff_avg > resync_threshold)
+  {
+    const int max_song_length_secs = 10 * 60;
+    const int pixels_per_sec = 200;
+    
+    const double secs_per_quarter =
+        parsed_file.ticks_per_quarter_note * parsed_file.seconds_per_tick;
+    
+    const size_t num_lines = lines.size();
+    
+    const Size visibleSize = Director::getInstance()->getVisibleSize();
+    const float mid_h = visibleSize.height / 2;
+    const float mid_w = visibleSize.width / 2;
+    
+    const double moved_pixels = pixels_per_sec*curr_time;
+    const double width_in_pixels = secs_per_quarter*pixels_per_sec;
+
+    const int num_cycles = static_cast<int>(moved_pixels / (2*width_in_pixels));
+    const double offset = moved_pixels - (2*width_in_pixels*num_cycles);
+
     {
-      const int max_song_length_secs = 10 * 60;
-      const int pixels_per_sec = 200;
-      
-      const double secs_per_quarter =
-          parsed_file.ticks_per_quarter_note * parsed_file.seconds_per_tick;
-      
-      const size_t num_lines = lines.size();
-      
-      const Size visibleSize = Director::getInstance()->getVisibleSize();
-      const float mid_h = visibleSize.height / 2;
-      const float mid_w = visibleSize.width / 2;
-      
-      const double moved_pixels = pixels_per_sec*curr_time;
-      const double width_in_pixels = secs_per_quarter*pixels_per_sec;
+        line_holder->setPosition(-offset + mid_w, 51);
 
-      const int num_cycles = static_cast<int>(moved_pixels / (2*width_in_pixels));
-      const double offset = moved_pixels - (2*width_in_pixels*num_cycles);
+        line_holder->stopAllActions();
+        auto moveByStart = MoveBy::create(2 * secs_per_quarter, Vec2(-2 * pixels_per_sec*secs_per_quarter, 0));
+        auto moveToEnd = MoveTo::create(0.0f, Vec2(-offset + mid_w, 51));
+        auto seq = Sequence::create(moveByStart, moveToEnd, nullptr);
 
-      {
-          line_holder->setPosition(-offset + mid_w, 51);
+        line_holder->runAction(RepeatForever::create(seq));
+    }
 
-          line_holder->stopAllActions();
-          auto moveByStart = MoveBy::create(2 * secs_per_quarter, Vec2(-2 * pixels_per_sec*secs_per_quarter, 0));
-          auto moveToEnd = MoveTo::create(0.0f, Vec2(-offset + mid_w, 51));
-          auto seq = Sequence::create(moveByStart, moveToEnd, nullptr);
+    notes_holder->setPosition(mid_w - moved_pixels, 51);
 
-          line_holder->runAction(RepeatForever::create(seq));
-      }
+    last_diffs.clear();
+    for (int i = 0; i < 10; i++)
+        last_diffs.push_back(0.0);
 
-      notes_holder->setPosition(mid_w - moved_pixels, 51);
+    accum_time_since_sync = curr_time;
 
-      last_diffs.clear();
-      for (int i = 0; i < 10; i++)
-          last_diffs.push_back(0.0);
-
-      accum_time_since_sync = curr_time;
-
-      log("Re-sync to audio");
+    log("Re-sync to audio");
   }
 
   diff_last = diff_now;
 
   prune_old_notes();
+
+  update_health_bar();
 
   const bool song_done = player_health <= 0.0 || note_sprites.empty();
 
