@@ -10,7 +10,7 @@ USING_NS_CC;
 #include "audio/include/SimpleAudioEngine.h"
 #include "audio/include/AudioEngine.h"
 #include <iostream>
-#include <CCFileUtils.h>
+#include "cocos/platform/CCFileUtils.h"
 
 const int MOVE_TAG = 1;
 const int TINT_TAG = 2;
@@ -355,7 +355,7 @@ void LevelScene::update(float dt)
   AudioEngine::AudioState state = AudioEngine::getState(audio_id);
   double curr_time = AudioEngine::getCurrentTime(audio_id);
   accum_time_since_sync += static_cast<double>(dt);
-  const double diff_now = abs(curr_time - accum_time_since_sync);
+  const double diff_now = std::abs(curr_time - accum_time_since_sync);
 
   last_diffs.pop_back();
   last_diffs.push_front(diff_now);
