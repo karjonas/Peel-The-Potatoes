@@ -69,6 +69,8 @@ void LevelScene::post_init(GlobalData global_data)
 
   _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
+  key_to_note = global_data.levels[global_data.curr_level_idx].key_to_note;
+
   note_to_key[35] = EventKeyboard::KeyCode::KEY_H;
   note_to_string[35] = "H";
   note_to_offset_idx[35] = -1;
@@ -135,6 +137,9 @@ void LevelScene::post_init(GlobalData global_data)
 
   for (int i = 0; i < 10; i++)
     last_diffs.push_back(0.0);
+
+  for (const Note& note : current_notes)
+    notes_in_song.insert(note.note_id);
 }
 
 void LevelScene::create_tab_sprite()
@@ -450,6 +455,11 @@ void LevelScene::update(float dt)
 
   for (auto key : heldKeys)
   {
+    const int note_id = key_to_note[key];
+
+    if (std::find(notes_in_song.begin(), notes_in_song.end(), note_id) == notes_in_song.end())
+      continue;
+
     bool hit = false;
 
     for (int idx : current_indices)

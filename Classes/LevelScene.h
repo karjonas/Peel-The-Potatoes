@@ -9,12 +9,15 @@
 #include "audio/include/AudioEngine.h"
 
 #include <list>
+#include <set>
 
 struct LevelData
 {
   std::string pre_level_text = "";
   std::string audio_file;
   std::string midi_file;
+
+  std::map<cocos2d::EventKeyboard::KeyCode, int> key_to_note;
 };
 
 struct GlobalData
@@ -23,6 +26,7 @@ struct GlobalData
   std::vector<std::string> pre_level_text;
   std::string curr_level_text;
   size_t curr_level_idx = 0;
+  
 
   double c_note_miss_damage = 10.0;
   double c_hold_miss_damage_per_sec = 10.0;
@@ -61,6 +65,9 @@ public:
     std::vector<cocos2d::EventKeyboard::KeyCode> heldKeys;
     std::vector<cocos2d::EventKeyboard::KeyCode> releasedKeys;
 
+    std::set<int> notes_in_song;
+
+
     ParsedFile parsed_file;
 
     cocos2d::Texture2D* heart_full = nullptr;
@@ -68,6 +75,8 @@ public:
     cocos2d::Texture2D* heart_half = nullptr;
 
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
+    std::map<cocos2d::EventKeyboard::KeyCode, int> key_to_note;
+
     std::map<int, std::string> note_to_string;
     std::map<int, int> note_to_offset_idx;
 

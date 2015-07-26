@@ -61,27 +61,38 @@ void HelloWorld::update(float dt)
     LevelData level;
     level.audio_file = "songs/Ac Dc - Back In Black (Pro).mp3";
     level.midi_file = "songs/Ac Dc - Back In Black (Pro).mid";
-    global_data.levels.push_back(level);
     global_data.pre_level_text.push_back("Peel the Potatoes!");
-    global_data.curr_level_text = global_data.pre_level_text[0];
+
+    level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 35;
+    level.key_to_note[EventKeyboard::KeyCode::KEY_D] = 40;
+    global_data.levels.push_back(level);
   }
 
   {
     LevelData level;
     level.audio_file = "songs/Ac Dc - Highway To Hell (Pro).mp3";
     level.midi_file = "songs/Ac Dc - Highway To Hell (Pro).mid";
-    global_data.levels.push_back(level);
     global_data.pre_level_text.push_back("The potatoes are resilient!");
+    level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 36;
+    level.key_to_note[EventKeyboard::KeyCode::KEY_D] = 40;
+    global_data.levels.push_back(level);
   }
 
   {
-      LevelData level;
-      level.audio_file = "songs/Kiss - Heaven's On Fire (Pro).mp3";
-      level.midi_file = "songs/Kiss - Heaven's On Fire (Pro).mid";
-      global_data.levels.push_back(level);
-      global_data.pre_level_text.push_back("All potatoes must fall!");
+    LevelData level;
+    level.audio_file = "songs/Kiss - Heaven's On Fire (Pro).mp3";
+    level.midi_file = "songs/Kiss - Heaven's On Fire (Pro).mid";
+    global_data.pre_level_text.push_back("All potatoes must fall!");
+    level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 35;
+    level.key_to_note[EventKeyboard::KeyCode::KEY_D] = 38;
+
+    level.key_to_note[EventKeyboard::KeyCode::KEY_S] = 49;
+    level.key_to_note[EventKeyboard::KeyCode::KEY_W] = 45;
+    level.key_to_note[EventKeyboard::KeyCode::KEY_E] = 43;
+    global_data.levels.push_back(level);
   }
 
+  global_data.curr_level_text = global_data.pre_level_text[0];
 
   auto first_level = PreLevelScene::createScene(global_data);
   Director::getInstance()->replaceScene(first_level);
