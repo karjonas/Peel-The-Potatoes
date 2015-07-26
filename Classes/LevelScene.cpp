@@ -340,7 +340,7 @@ void LevelScene::update(float dt)
   // Check if Esc pressed
   if (std::find(releasedKeys.begin(), releasedKeys.end(), EventKeyboard::KeyCode::KEY_ESCAPE) != releasedKeys.end())
   {
-    AudioEngine::stop(audio_id);
+    AudioEngine::pause(audio_id);
     auto pauseScene = PauseScene::createScene();
     Director::getInstance()->pushScene(pauseScene);
     releasedKeys.clear();
