@@ -110,6 +110,7 @@ public:
     const double resync_threshold = 0.2;
 
     std::list<double> last_diffs;
+    const double song_fade_out_time_secs = 3.0;
 };
 
 #endif // __LEVEL_SCENE_H__

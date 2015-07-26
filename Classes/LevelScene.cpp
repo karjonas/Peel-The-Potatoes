@@ -419,7 +419,9 @@ void LevelScene::update(float dt)
 
   if (song_done)
   {
-      AudioEngine::setVolume(audio_id, 0.5);
+      const double vol = AudioEngine::getVolume(audio_id);
+      const double vol_dec = static_cast<double>(dt)/song_fade_out_time_secs;
+      AudioEngine::setVolume(audio_id, vol - vol_dec);
 
       if (note_sprites.empty() && (accum_time_since_sync < song_end_time))
         return; // Wait some before next level

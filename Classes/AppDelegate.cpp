@@ -67,5 +67,5 @@ void AppDelegate::applicationDidEnterBackground() {
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
 
-    AudioEngine::resumeAll();
+    //AudioEngine::resumeAll();
 }
