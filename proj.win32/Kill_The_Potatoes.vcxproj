@@ -155,6 +155,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\midifile\src-library\Options.cpp" />
     <ClCompile Include="..\Classes\MidiReader.cpp" />
     <ClCompile Include="..\Classes\NoteSprite.cpp" />
+    <ClCompile Include="..\Classes\PauseScene.cpp" />
     <ClCompile Include="..\Classes\PreLevelScene.cpp" />
     <ClCompile Include="..\Classes\WinningScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\LevelScene.h" />
     <ClInclude Include="..\Classes\MidiReader.h" />
     <ClInclude Include="..\Classes\NoteSprite.h" />
+    <ClInclude Include="..\Classes\PauseScene.h" />
     <ClInclude Include="..\Classes\PreLevelScene.h" />
     <ClInclude Include="..\Classes\WinningScene.h" />
     <ClInclude Include="main.h" />

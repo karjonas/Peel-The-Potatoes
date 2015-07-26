@@ -57,6 +57,9 @@
     <ClCompile Include="..\Classes\midifile\src-library\Options.cpp">
       <Filter>src\midifile</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\PauseScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -81,6 +84,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\WinningScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PauseScene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
