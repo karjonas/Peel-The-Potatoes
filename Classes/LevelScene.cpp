@@ -3,6 +3,7 @@
 #include "MidiReader.h"
 #include "WinningScene.h"
 #include "PreLevelScene.h"
+#include "PauseScene.h"
 
 USING_NS_CC;
 
@@ -334,6 +335,18 @@ void LevelScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 
 void LevelScene::update(float dt)
 {
+  AudioEngine::resume(audio_id);
+
+  // Check if Esc pressed
+  if (std::find(releasedKeys.begin(), releasedKeys.end(), EventKeyboard::KeyCode::KEY_ESCAPE) != releasedKeys.end())
+  {
+    AudioEngine::stop(audio_id);
+    auto pauseScene = PauseScene::createScene();
+    Director::getInstance()->pushScene(pauseScene);
+    releasedKeys.clear();
+    return;
+  }
+
   AudioEngine::AudioState state = AudioEngine::getState(audio_id);
   double curr_time = AudioEngine::getCurrentTime(audio_id);
   accum_time_since_sync += static_cast<double>(dt);
@@ -493,6 +506,7 @@ void LevelScene::update(float dt)
       potato_sprite->runAction(seq_potato);
   }
 
+  releasedKeys.clear();
 }
 
 
