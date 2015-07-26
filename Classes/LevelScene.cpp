@@ -10,7 +10,7 @@ USING_NS_CC;
 #include "audio/include/SimpleAudioEngine.h"
 #include "audio/include/AudioEngine.h"
 #include <iostream>
-#include "cocos/platform/CCFileUtils.h"
+#include "platform/CCFileUtils.h"
 
 const int MOVE_TAG = 1;
 const int TINT_TAG = 2;
