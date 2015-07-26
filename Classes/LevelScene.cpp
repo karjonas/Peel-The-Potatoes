@@ -122,6 +122,13 @@ void LevelScene::post_init(GlobalData global_data)
     addChild(potato_sprite, 1);
   }
 
+  {
+    auto tex_cache = CCTextureCache::sharedTextureCache();
+    heart_full = tex_cache->addImage("pics/heart_full.png");
+    heart_empty = tex_cache->addImage("pics/heart_empty.png");
+    heart_half = tex_cache->addImage("pics/heart_half.png");
+  }
+
   if (godmode)
     player_health = 9999999;
 
@@ -253,17 +260,16 @@ std::vector<int> LevelScene::get_current_note_sprite_indices() const
 
 void LevelScene::update_health_bar()
 {
-  auto tex_cache = CCTextureCache::sharedTextureCache();
   const int num_hearts = hearts.size();
   for (int i = 0; i < num_hearts; i++)
   {
     const double heart_health = i*10;
     if (player_health > (heart_health + 5))
-      hearts[i]->setTexture(tex_cache->addImage("pics/heart_full.png"));
+      hearts[i]->setTexture(heart_full);
     else if (player_health <= heart_health)
-      hearts[i]->setTexture(tex_cache->addImage("pics/heart_empty.png"));
+      hearts[i]->setTexture(heart_empty);
     else
-      hearts[i]->setTexture(tex_cache->addImage("pics/heart_half.png"));
+      hearts[i]->setTexture(heart_half);
   }
 }
 

@@ -63,6 +63,10 @@ public:
 
     ParsedFile parsed_file;
 
+    cocos2d::Texture2D* heart_full = nullptr;
+    cocos2d::Texture2D* heart_empty = nullptr;
+    cocos2d::Texture2D* heart_half = nullptr;
+
     std::map<int, cocos2d::EventKeyboard::KeyCode> note_to_key;
     std::map<int, std::string> note_to_string;
     std::map<int, int> note_to_offset_idx;
