@@ -34,16 +34,20 @@ bool WinningScene::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
   }
 
-  {
-    const Size visibleSize = Director::getInstance()->getVisibleSize();
-    const float mid_h = visibleSize.height/2;
-    const float mid_w = visibleSize.width/2;
+  const Size visibleSize = Director::getInstance()->getVisibleSize();
+  const float mid_h = visibleSize.height / 2;
+  const float mid_w = visibleSize.width / 2;
 
-    auto label = Label::createWithTTF("CONGRATULATIONS!", "fonts/Xolonium-Bold.otf", 32);
-    label->setPosition(cocos2d::Point(mid_w, mid_h));
+  {
+    auto label = Label::createWithTTF("Congratulations!", "fonts/Xolonium-Bold.otf", 32);
+    label->setPosition(cocos2d::Point(mid_w, mid_h + 15));
     addChild(label, 1);
   }
-
+  {
+    auto label = Label::createWithTTF("All potatoes are peeled!", "fonts/Xolonium-Bold.otf", 32);
+    label->setPosition(cocos2d::Point(mid_w, mid_h - 15));
+    addChild(label, 1);
+  }
   return true;
 }
 
