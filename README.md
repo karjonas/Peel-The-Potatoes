@@ -3,8 +3,8 @@ Peel The Potatoes
 
 A Insanity Game Jam 4 entry written by Jonas Karlsson.
 
-Building and running
---------------------
+Building
+--------
 
 Download sources:
 ```sh
@@ -27,3 +27,12 @@ Open proj.win32\Kill_The_Potatoes.sln
 
 Mac:
 Open proj.ios_mac\Kill_The_Potatoes.xcodeproj
+
+License
+-------
+
+The 'Xolonium' font by Severin Meyer is licensed under the SIL Open Font License (OFL).
+
+All graphics in Resources/pics is licensed under the CC BY 4.0 License. See https://creativecommons.org/licenses/by/4.0/
+
+All source code is licensed under the MIT License. See http://opensource.org/licenses/MIT
