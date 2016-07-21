@@ -114,6 +114,7 @@ include_directories(
   ${COCOS2D_ROOT}/cocos/platform
   ${COCOS2D_ROOT}/cocos/audio/include/
   Classes
+  Classes/midifile/include
 )
 if ( WIN32 )
   include_directories(
@@ -123,14 +124,32 @@ if ( WIN32 )
 endif( WIN32 )
 
 set(GAME_SRC
-  Classes/AppDelegate.cpp
+  Classes/WinningScene.cpp
+  Classes/PreLevelScene.cpp
+  Classes/PauseScene.cpp
+  Classes/NoteSprite.cpp
+  Classes/MidiReader.cpp
+  Classes/LevelScene.cpp
   Classes/HelloWorldScene.cpp
+  Classes/AppDelegate.cpp
+  Classes/midifile/src-library/Binasc.cpp
+  Classes/midifile/src-library/MidiEvent.cpp
+  Classes/midifile/src-library/MidiEventList.cpp
+  Classes/midifile/src-library/MidiFile.cpp
+  Classes/midifile/src-library/MidiMessage.cpp
+  Classes/midifile/src-library/Options.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
 set(GAME_HEADERS
-  Classes/AppDelegate.h
+  Classes/WinningScene.h
+  Classes/PreLevelScene.h
+  Classes/PauseScene.h
+  Classes/NoteSprite.h
+  Classes/MidiReader.h
+  Classes/LevelScene.h
   Classes/HelloWorldScene.h
+  Classes/AppDelegate.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 
