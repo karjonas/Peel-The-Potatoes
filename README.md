@@ -10,11 +10,10 @@ Download sources:
 ```sh
 $ git clone https://bitbucket.org/karjonas/insanityjam4 peel_the_potatoes
 $ cd peel_the_potatoes
-$ wget http://www.cocos2d-x.org/filedown/cocos2d-x-3.7.zip
-$ unzip cocos2d-x-3.7.zip .
-$ mv cocos2d-x-3.7 cocos2d
-$ git clone https://github.com/karjonas/midifile.git Classes/midifile
-$ git clone https://github.com/cocos2d/cocos2d-x.git cocos2d
+$ wget http://www.cocos2d-x.org/filedown/cocos2d-x-3.12.zip
+$ unzip cocos2d-x-3.12.zip -d .
+$ mv cocos2d-x-3.12 cocos2d
+$ git clone https://github.com/craigsapp/midifile.git Classes/midifile
 ```
 
 Linux:
