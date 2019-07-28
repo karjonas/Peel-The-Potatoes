@@ -10,25 +10,22 @@ Download sources:
 ```sh
 $ git clone https://bitbucket.org/karjonas/insanityjam4 peel_the_potatoes
 $ cd peel_the_potatoes
-$ wget http://www.cocos2d-x.org/filedown/start/339 -O cocos2d-x-3.12.zip
-$ unzip cocos2d-x-3.12.zip -d .
-$ mv cocos2d-x-3.12 cocos2d
-$ git clone https://github.com/craigsapp/midifile.git Classes/midifile
+$ git submodule update --init
 ```
 
 Linux:
 ```sh
-$ mkdir bin
-$ cd bin
+$ mkdir build
+$ cd build
 $ cmake ..
 $ make
 ```
 
 Windows:
-Open proj.win32\Kill_The_Potatoes.sln
+Open proj.win32\Peel-The-Potatoes.sln
 
 Mac:
-Open proj.ios_mac\Kill_The_Potatoes.xcodeproj
+Open proj.ios_mac\Peel-The-Potatoes.xcodeproj
 
 License
 -------
