@@ -59,8 +59,8 @@ void HelloWorld::update(float dt)
 
   {
     LevelData level;
-    level.audio_file = "songs/Ac Dc - Back In Black (Pro).mp3";
-    level.midi_file = "songs/Ac Dc - Back In Black (Pro).mid";
+    level.audio_file = "songs/Ac Dc - Back In Black.mp3";
+    level.midi_file = "songs/Ac Dc - Back In Black.mid";
     global_data.pre_level_text.push_back("Peel the Potatoes!");
 
     level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 35;
@@ -70,8 +70,8 @@ void HelloWorld::update(float dt)
 
   {
     LevelData level;
-    level.audio_file = "songs/Ac Dc - Highway To Hell (Pro).mp3";
-    level.midi_file = "songs/Ac Dc - Highway To Hell (Pro).mid";
+    level.audio_file = "songs/Ac Dc - Highway To Hell.mp3";
+    level.midi_file = "songs/Ac Dc - Highway To Hell.mid";
     global_data.pre_level_text.push_back("The potatoes are resilient!");
     level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 36;
     level.key_to_note[EventKeyboard::KeyCode::KEY_D] = 40;
@@ -80,8 +80,8 @@ void HelloWorld::update(float dt)
 
   {
     LevelData level;
-    level.audio_file = "songs/Kiss - Heaven's On Fire (Pro).mp3";
-    level.midi_file = "songs/Kiss - Heaven's On Fire (Pro).mid";
+    level.audio_file = "songs/Kiss - Heavens On Fire.mp3";
+    level.midi_file = "songs/Kiss - Heavens On Fire.mid";
     global_data.pre_level_text.push_back("All potatoes must fall!");
     level.key_to_note[EventKeyboard::KeyCode::KEY_H] = 35;
     level.key_to_note[EventKeyboard::KeyCode::KEY_D] = 38;

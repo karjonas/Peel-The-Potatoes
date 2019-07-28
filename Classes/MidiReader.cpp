@@ -10,7 +10,7 @@
 ParsedFile parse_attack_notes(const char* file_path)
 {
   ParsedFile parsed_file;
-  MidiFile midifile;
+  smf::MidiFile midifile;
 
   midifile.read(file_path);
 
