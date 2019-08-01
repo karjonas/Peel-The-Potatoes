@@ -1,7 +1,9 @@
 Peel The Potatoes
 =================
 
-A Insanity Game Jam 4 entry written by Jonas Karlsson.
+An "Insanity Game Jam 4" entry written by Jonas Karlsson.
+
+![Screenshot](screenshot.png?raw=true)
 
 Building
 --------
