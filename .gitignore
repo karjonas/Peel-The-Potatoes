@@ -137,3 +137,17 @@ project.properties
 /templates/lua-template-runtime/runtime
 /v*-deps-*.zip
 /v*-lua-runtime-*.zip
+
+build/
+*.AppImage
+*~
+*#
+*.autosave
+*.files
+*.config
+*.includes
+*.creator*
+*.cflags
+*.cxxflags
+*.user
+.vscode

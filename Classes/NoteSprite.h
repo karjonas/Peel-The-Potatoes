@@ -7,9 +7,9 @@
 
 struct NoteSprite
 {
-  Note note;
-  cocos2d::Label* label = nullptr;
-  bool has_hit = false;
+    Note note;
+    cocos2d::Label* label = nullptr;
+    bool has_hit = false;
 };
 
 #endif // __NOTE_SPRITE_H__
