@@ -7,7 +7,21 @@ USING_NS_CC;
 
 using namespace cocos2d::experimental;
 
-AppDelegate::AppDelegate() {}
+AppDelegate::AppDelegate()
+{
+    CCFileUtils* fileUtils = CCFileUtils::sharedFileUtils();
+    std::vector<std::string> searchPaths = fileUtils->getSearchPaths();
+    constexpr auto INSTALL_DIR = "/usr/share/Peel-The-Potatoes/Resources";
+    searchPaths.push_back(INSTALL_DIR);
+
+    if (auto appDir = getenv("APPDIR"))
+    {
+        const std::string appDirPrefix = appDir != nullptr ? appDir : "";
+        searchPaths.push_back(appDirPrefix + INSTALL_DIR);
+    }
+
+    fileUtils->setSearchPaths(searchPaths);
+}
 
 AppDelegate::~AppDelegate() {}
 

@@ -168,3 +168,6 @@ if(LINUX OR WINDOWS)
     set(APP_RES_DIR "$<TARGET_FILE_DIR:${APP_NAME}>/Resources")
     cocos_copy_target_res(${APP_NAME} COPY_TO ${APP_RES_DIR} FOLDERS ${GAME_RES_FOLDER})
 endif()
+
+install(TARGETS ${APP_NAME} DESTINATION bin)
+install(DIRECTORY ${GAME_RES_FOLDER} DESTINATION share/Peel-The-Potatoes)
